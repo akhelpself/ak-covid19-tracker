@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import com.akdev.covid19tracker.R;
 
@@ -18,18 +20,41 @@ public class SymptomsFragment extends Fragment {
 
     private SymptomsViewModel symptomsViewModel;
 
+    @BindView(R.id.tvHowItSpreadsDesc)
+    TextView tvHowItSpreadsDesc;
+
+    @BindView(R.id.tvCleanYourHands)
+    TextView tvCleanYourHands;
+
+    @BindView(R.id.tvAvoidCloseContact)
+    TextView tvAvoidCloseContact;
+
+    @BindView(R.id.tvStayHome)
+    TextView tvStayHome;
+
+    @BindView(R.id.tvCoverCough)
+    TextView tvCoverCough;
+
+    @BindView(R.id.tvWearFaceMask)
+    TextView tvWearFaceMask;
+
+    @BindView(R.id.tvCleanAndDisinfect)
+    TextView tvCleanAndDisinfect;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        symptomsViewModel =
-                ViewModelProviders.of(this).get(SymptomsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_notifications, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
-        symptomsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        symptomsViewModel = ViewModelProviders.of(this).get(SymptomsViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_symptoms, container, false);
+        ButterKnife.bind(this, root);
+
+        symptomsViewModel.getTextHowItSpreadsDesc().observe(getViewLifecycleOwner(), tvHowItSpreadsDesc::setText);
+        symptomsViewModel.getTextCleanYourHands().observe(getViewLifecycleOwner(), tvCleanYourHands::setText);
+        symptomsViewModel.getTextVoidCloseContact().observe(getViewLifecycleOwner(), tvAvoidCloseContact::setText);
+        symptomsViewModel.getTextStayHome().observe(getViewLifecycleOwner(), tvStayHome::setText);
+        symptomsViewModel.getTextCoverCough().observe(getViewLifecycleOwner(), tvCoverCough::setText);
+        symptomsViewModel.getTextWearFaceMask().observe(getViewLifecycleOwner(), tvWearFaceMask::setText);
+        symptomsViewModel.getTextCleanAndDisinfect().observe(getViewLifecycleOwner(), tvCleanAndDisinfect::setText);
+
         return root;
     }
 }

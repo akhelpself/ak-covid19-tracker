@@ -7,7 +7,7 @@
     <string name="home_confirmed">Confirmed</string>
     <string name="home_deaths">Deaths</string>
     <string name="home_recovered">Recovered</string>
-    <string name="home_copy_right">© 2020 AK Dev Team. All rights reserved.</string>
+    <string name="home_copy_right">© 2020 AK Dev Team</string>
     <string name="home_source">2019 Novel Coronavirus COVID-19 (2019-nCoV) Data Repository by Johns Hopkins CSSE</string>
 
     <string name="dashboard_item_country">Country:</string>
@@ -16,5 +16,98 @@
     <string name="dashboard_item_deaths">Deaths:</string>
     <string name="dashboard_item_recovered">Recovered:</string>
     <string name="dashboard_search_hint">Enter country or province…</string>
+
+    <string name="symptoms_desc">If you develop emergency warning signs for COVID-19 get medical attention immediately. Emergency warning signs include*:</string>
+    <string name="symptoms_desc_01">\t- Difficulty breathing or shortness of breath</string>
+    <string name="symptoms_desc_02">\t- Persistent pain or pressure in the chest</string>
+    <string name="symptoms_desc_03">\t- New confusion or inability to arouse</string>
+    <string name="symptoms_desc_04">\t- Bluish lips or face</string>
+    <string name="symptoms_notes">*This list is not all inclusive. Please consult your medical provider for any other symptoms that are severe or concerning.</string>
+    <string name="symptoms_protect_header">How to protect yourself</string>
+    
+    <string name="symptoms_how_it_spreads">Know How it Spreads</string>
+    <string name="symptoms_how_it_spreads_desc">
+        <![CDATA[
+         <ul>
+            <li>There is currently no vaccine to prevent coronavirus disease 2019 (COVID-19).</li>
+            <li><strong>The best way to prevent illness is to avoid being exposed to this virus.</strong></li>
+            <li>The virus is thought to spread mainly from person-to-person.
+            <p>&emsp;- Between people who are in close contact with one another (within about 6 feet).</p>
+            <p>&emsp;- Through respiratory droplets produced when an infected person coughs or sneezes.</p>
+            </li>
+            <li>These droplets can land in the mouths or noses of people who are nearby or possibly be inhaled into the lungs.</li>
+        </ul>
+         ]]>
+    </string>
+
+    <string name="symptoms_take_protect_yourself">Take steps to protect yourself</string>
+    <string name="symptoms_take_protect_yourself_desc_01">
+        <![CDATA[
+         <div>
+            <h3>Clean your hands often</h3>
+            <ul>
+            <li><strong>Wash your hands</strong> often with soap and water for at least 20 seconds especially after you have been in a public place, or after blowing your nose, coughing, or sneezing.</li>
+            <li>If soap and water are not readily available, <strong>use a hand sanitizer that contains at least 60% alcohol</strong>. Cover all surfaces of your hands and rub them together until they feel dry.</li>
+            <li><strong>Avoid touching</strong> <strong>your eyes, nose, and mouth</strong> with unwashed hands.</li>
+            </ul>
+            </div>
+         ]]>
+    </string>
+
+    <string name="symptoms_take_protect_yourself_desc_02">
+        <![CDATA[
+         <div><h3>Avoid close contact</h3>
+            <ul>
+            <li><strong>Avoid close contact</strong> with people who are sick</li>
+            <li>Put <strong>distance between yourself and other</strong> <strong>people</strong> if COVID-19 is spreading in your community. This is especially important for people who are at higher risk of getting very sick.</li>
+            </ul>
+            </div>
+         ]]>
+    </string>
+
+    <string name="symptoms_take_protect_others">Take steps to protect others</string>
+    <string name="symptoms_take_protect_others_desc_01">
+        <![CDATA[
+            <div><h3>Stay home if you’re sick</h3>
+            <ul>
+            <li><strong>Stay home</strong> if you are sick, except to get medical care.</li>
+            </ul>
+            </div>
+        ]]>
+    </string>
+    <string name="symptoms_take_protect_others_desc_02">
+        <![CDATA[
+           <div><h3>Cover coughs and sneezes</h3>
+            <ul>
+            <li><strong>Cover your mouth and nose</strong> with a tissue when you cough or sneeze or use the inside of your elbow.</li>
+            <li><strong>Throw used tissues</strong> in the trash.</li>
+            <li>Immediately <strong>wash your hands</strong> with soap and water for at least 20 seconds. If soap and water are not readily available, clean your hands with a hand sanitizer that contains at least 60% alcohol.</li>
+            </ul>
+            </div>
+        ]]>
+    </string>
+    <string name="symptoms_take_protect_others_desc_03">
+        <![CDATA[
+           <div><h3>Wear a face mask if you are sick</h3>
+            <ul>
+            <li><strong>If you are sick:</strong> You should wear a face mask when you are around other people (e.g., sharing a room or vehicle) and before you enter a healthcare provider’s office. If you are not able to wear a facemask (for example, because it causes trouble breathing), then you should do your best to cover your coughs and sneezes, and people who are caring for you should wear a facemask if they enter your room.</li>
+            </ul>
+            <ul>
+            <li><strong>If you are NOT sick: </strong>You do not need to wear a face mask unless you are caring for someone who is sick (and they are not able to wear a facemask). Facemasks may be in short supply and they should be saved for caregivers.</li>
+            </ul>
+            </div>
+        ]]>
+    </string>
+
+    <string name="symptoms_take_protect_others_desc_04">
+        <![CDATA[
+           <div><h3>Clean and disinfect</h3>
+            <ul>
+            <li><strong>Clean AND disinfect frequently touched surfaces daily</strong>. This includes tables, doorknobs, light switches, countertops, handles, desks, phones, keyboards, toilets, faucets, and sinks.</li>
+            <li><strong>If surfaces are dirty, clean them:</strong> Use detergent or soap and water prior to disinfection.</li>
+            </ul>
+        ]]>
+    </string>
+    <string name="symptoms_source">Source: www.cdc.gov</string>
 
 </resources>

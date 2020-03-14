@@ -21,5 +21,5 @@
         android:id="@+id/navigation_notifications"
         android:name="com.akdev.covid19tracker.ui.notifications.SymptomsFragment"
         android:label="@string/title_symptoms"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_symptoms" />
 </navigation>
