@@ -6,6 +6,7 @@ import com.onesignal.OneSignal;
 
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
+import io.realm.Realm;
 
 public class MainApplication extends MultiDexApplication {
 
@@ -18,6 +19,7 @@ public class MainApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        Realm.init(this);
         OneSignal.startInit(this)
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
                 .unsubscribeWhenNotificationsAreDisabled(true)
