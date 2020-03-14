@@ -11,17 +11,40 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import com.akdev.covid19tracker.R;
+
+import java.text.DecimalFormat;
 
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
 
+    @BindView(R.id.tvConfirmed)
+    TextView tvConfirmed;
+
+    @BindView(R.id.tvDeaths)
+    TextView tvDeaths;
+
+    @BindView(R.id.tvRecovered)
+    TextView tvRecovered;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+        ButterKnife.bind(this, root);
+
+        String pattern = "###,###";
+        final DecimalFormat decimalFormat = new DecimalFormat(pattern);
+
+        homeViewModel.getLatestData().observe(getViewLifecycleOwner(), latestData -> {
+            tvConfirmed.setText(decimalFormat.format(latestData.getConfirmed()));
+            tvDeaths.setText(decimalFormat.format(latestData.getDeaths()));
+            tvRecovered.setText(decimalFormat.format(latestData.getRecovered()));
+        });
         return root;
     }
 }

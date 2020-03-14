@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="12dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,8 +13,8 @@
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginStart="4dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="4dp"
             app:cardBackgroundColor="@color/card_header_background"
             android:layout_weight="1">
@@ -32,9 +33,9 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvConfirmed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="231.432"
                     android:textColor="@android:color/holo_orange_dark"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -44,9 +45,9 @@
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="150dp"
             android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="8dp"
             app:cardBackgroundColor="@color/card_header_background"
             android:layout_weight="1">
 
@@ -64,9 +65,9 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvDeaths"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="231.432"
                     android:textColor="@android:color/holo_red_dark"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -78,9 +79,9 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         app:cardBackgroundColor="@color/card_header_background"
-        android:layout_margin="4dp">
+        android:layout_margin="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -96,9 +97,9 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tvRecovered"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="231.432"
                 android:textColor="@android:color/holo_green_dark"
                 android:textSize="24sp"
                 android:textStyle="bold" />
