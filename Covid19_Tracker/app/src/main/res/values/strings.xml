@@ -7,4 +7,12 @@
     <string name="home_confirmed">Confirmed</string>
     <string name="home_deaths">Deaths</string>
     <string name="home_recovered">Recovered</string>
+
+    <string name="dashboard_item_country">Country:</string>
+    <string name="dashboard_item_province">Province:</string>
+    <string name="dashboard_item_confirmed">Confirmed:</string>
+    <string name="dashboard_item_deaths">Deaths:</string>
+    <string name="dashboard_item_recovered">Recovered:</string>
+    <string name="dashboard_search_hint">Enter country or province…</string>
+
 </resources>
