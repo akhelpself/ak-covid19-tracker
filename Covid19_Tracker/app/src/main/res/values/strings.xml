@@ -2,11 +2,13 @@
     <string name="app_name">Covid19 Tracker</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_symptoms">Symptoms</string>
 
     <string name="home_confirmed">Confirmed</string>
     <string name="home_deaths">Deaths</string>
     <string name="home_recovered">Recovered</string>
+    <string name="home_copy_right">© 2020 AK Dev Team. All rights reserved.</string>
+    <string name="home_source">2019 Novel Coronavirus COVID-19 (2019-nCoV) Data Repository by Johns Hopkins CSSE</string>
 
     <string name="dashboard_item_country">Country:</string>
     <string name="dashboard_item_province">Province:</string>
