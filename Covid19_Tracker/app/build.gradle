@@ -1,4 +1,17 @@
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 apply plugin: 'com.android.application'
+apply plugin: 'realm-android'
+apply plugin: 'com.google.gms.google-services'
+
+buildscript {
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2/'}
+    }
+    dependencies {
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.11.0, 0.99.99]'
+    }
+}
+
 
 android {
     compileSdkVersion 28
@@ -12,6 +25,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [
+                onesignal_app_id: 'bf31250c-7767-432f-b9b4-d4b6b604f91b',
+                // Project number pulled from dashboard, local value is ignored.
+                onesignal_google_project_number: 'REMOTE'
+        ]
     }
 
     buildTypes {
@@ -33,6 +51,14 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.0.0'
     implementation 'androidx.navigation:navigation-ui:2.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.google.firebase:firebase-analytics:17.2.2'
+
+    implementation 'com.onesignal:OneSignal:[3.9.1, 3.99.99]'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
