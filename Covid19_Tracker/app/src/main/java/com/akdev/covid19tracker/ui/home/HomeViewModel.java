@@ -14,6 +14,8 @@ import java.io.IOException;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -25,9 +27,19 @@ public class HomeViewModel extends AndroidViewModel {
     private MutableLiveData<LatestData> latestData;
     private final String TAG = HomeViewModel.class.getSimpleName();
 
+
     public HomeViewModel(Application application) {
         super(application);
+        Realm realm = Realm.getInstance(new RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded()
+                .build());
+
         latestData = new MutableLiveData<>();
+        LatestData data = realm.where(LatestData.class).equalTo("id", 1).findFirst();
+        if (data != null) {
+            latestData.postValue(data);
+        }
+
         try {
             getLatest(CovidService.GET_LATEST, new Callback() {
                 @Override
@@ -39,12 +51,19 @@ public class HomeViewModel extends AndroidViewModel {
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                     String body = response.body().string();
                     Gson g = new Gson();
-                    latestData.postValue(g.fromJson(body, LatestData.class));
+                    LatestData data = g.fromJson(body, LatestData.class);
+                    latestData.postValue(data);
+                    Realm realm = Realm.getInstance(new RealmConfiguration.Builder()
+                            .deleteRealmIfMigrationNeeded()
+                            .build());
+                    realm.executeTransaction(r -> {
+                        data.setId(1);
+                        r.insertOrUpdate(data);
+                    });
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
-//            Log.e("Latest exception:", e.getMessage());
+            Log.e("Latest exception:", e.getMessage());
         }
     }
 

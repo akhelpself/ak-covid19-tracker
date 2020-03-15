@@ -2,7 +2,13 @@ package com.akdev.covid19tracker.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class LatestData {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class LatestData extends RealmObject {
+
+    @PrimaryKey
+    private long id;
 
     @SerializedName("confirmed")
     private int confirmed;
@@ -35,5 +41,13 @@ public class LatestData {
 
     public void setRecovered(int recovered) {
         this.recovered = recovered;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
