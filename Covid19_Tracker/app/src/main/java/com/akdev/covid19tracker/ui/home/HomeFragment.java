@@ -17,6 +17,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.akdev.covid19tracker.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.text.DecimalFormat;
 
@@ -32,6 +34,9 @@ public class HomeFragment extends Fragment {
 
     @BindView(R.id.tvRecovered)
     TextView tvRecovered;
+
+    @BindView(R.id.adView)
+    AdView adView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +62,10 @@ public class HomeFragment extends Fragment {
             );
             alertDialog.show();
         });
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
         return root;
     }
 }

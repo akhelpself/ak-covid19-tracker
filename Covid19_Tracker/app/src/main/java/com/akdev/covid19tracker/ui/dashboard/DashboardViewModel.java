@@ -7,6 +7,7 @@ import com.akdev.covid19tracker.model.CovidData;
 import com.akdev.covid19tracker.model.realm.RCovidData;
 import com.akdev.covid19tracker.service.CovidService;
 import com.akdev.covid19tracker.service.ServiceAPI;
+import com.akdev.covid19tracker.utils.CommonUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -43,6 +44,8 @@ public class DashboardViewModel extends AndroidViewModel {
             List<CovidData> items = g.fromJson(rCovidData.getData(), new TypeToken<List<CovidData>>(){}.getType());
             mCovidData.postValue(items);
         }
+
+        if (!CommonUtils.checkNetworkWithAlert(application)) return;
 
         CovidService.getEntity(ServiceAPI.GET_ALL, new Callback() {
             @Override

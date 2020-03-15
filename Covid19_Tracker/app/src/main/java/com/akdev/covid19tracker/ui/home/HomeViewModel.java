@@ -9,6 +9,7 @@ import com.akdev.covid19tracker.R;
 import com.akdev.covid19tracker.model.LatestData;
 import com.akdev.covid19tracker.service.CovidService;
 import com.akdev.covid19tracker.service.ServiceAPI;
+import com.akdev.covid19tracker.utils.CommonUtils;
 import com.google.gson.Gson;
 
 import org.jetbrains.annotations.NotNull;
@@ -45,6 +46,8 @@ public class HomeViewModel extends AndroidViewModel {
         if (data != null) {
             latestData.postValue(data);
         }
+
+        if (!CommonUtils.checkNetworkWithAlert(application)) return;
 
         try {
             CovidService.getEntity(ServiceAPI.GET_LATEST, new Callback() {

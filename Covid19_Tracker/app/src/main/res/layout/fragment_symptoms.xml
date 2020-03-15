@@ -76,6 +76,15 @@
                 android:textStyle="italic"/>
         </LinearLayout>
 
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            android:layout_gravity="center"
+            ads:adUnitId="@string/ads_banner_symptom"/>
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

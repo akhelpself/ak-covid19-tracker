@@ -112,4 +112,11 @@
 
     <string name="dialog_error_header">Error!</string>
     <string name="dialog_cannot_get_data">Cannot get data from server!</string>
+
+    <string name="ads_app_id">ca-app-pub-9952957309467784~9898529727</string>
+    <string name="ads_banner_home">ca-app-pub-9952957309467784/5086214411</string>
+    <string name="ads_banner_symptom">ca-app-pub-9952957309467784/7029851475</string>
+
+    <string name="cannot_connect_network">Cannot connect network!</string>
+
 </resources>

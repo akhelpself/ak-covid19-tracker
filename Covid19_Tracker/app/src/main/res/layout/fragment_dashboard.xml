@@ -26,7 +26,7 @@
                 android:gravity="bottom">
 
                 <EditText
-                    android:id="@+id/search_app"
+                    android:id="@+id/etSearch"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -38,7 +38,7 @@
                     tools:ignore="NestedWeights" />
 
                 <Button
-                    android:id="@+id/clear_search_btn"
+                    android:id="@+id/btnClearSearch"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:background="@drawable/ic_clear_black_24dp" />
