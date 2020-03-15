@@ -1,0 +1,31 @@
+{% extends 'base' %}
+<!-- STYLE BLOCK -->
+{% block style %}
+<link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/css/bulma.min.css">
+<link rel="stylesheet" type="text/css" href="/css/main.css">
+<link rel="stylesheet" type="text/css" href="/css/bulma-docs.min.css">
+{% endblock style %}
+
+<!-- CONTENT BLOCK -->
+{% block content %}
+<div class="box">
+    <div class="media-content has-text-centered">
+        <h4 class="title is-4">Something went wrong!.</h4>
+        <img class="lzl" src="/images/default.gif" data-src="/images/ic_cloud_error.svg" width="128" height="128">
+        <p>
+            <a class="button is-default" href="/">
+                    <span class="icon is-small">
+                      <i class="fa fa-home"></i>
+                    </span>
+                <span>Go to Home</span>
+            </a>
+        </p>
+    </div>
+</div>
+{% endblock content %}
+
+<!-- SCRIPT BLOCK -->
+{% block script %}
+
+{% endblock script %}
