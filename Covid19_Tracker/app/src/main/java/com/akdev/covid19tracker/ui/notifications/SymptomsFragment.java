@@ -15,6 +15,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.akdev.covid19tracker.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class SymptomsFragment extends Fragment {
 
@@ -41,6 +43,9 @@ public class SymptomsFragment extends Fragment {
     @BindView(R.id.tvCleanAndDisinfect)
     TextView tvCleanAndDisinfect;
 
+    @BindView(R.id.adView)
+    AdView adView;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         symptomsViewModel = ViewModelProviders.of(this).get(SymptomsViewModel.class);
@@ -54,6 +59,9 @@ public class SymptomsFragment extends Fragment {
         symptomsViewModel.getTextCoverCough().observe(getViewLifecycleOwner(), tvCoverCough::setText);
         symptomsViewModel.getTextWearFaceMask().observe(getViewLifecycleOwner(), tvWearFaceMask::setText);
         symptomsViewModel.getTextCleanAndDisinfect().observe(getViewLifecycleOwner(), tvCleanAndDisinfect::setText);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
         return root;
     }
