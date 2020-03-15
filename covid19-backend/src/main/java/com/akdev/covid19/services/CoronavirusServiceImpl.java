@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 
-import static com.akdev.covid19.Route.*;
+import static com.akdev.covid19.utils.Route.*;
 
 @Service
-public class CoronavirusServiceImpl {
+public class CoronavirusServiceImpl implements CoronavirusService {
 
     private CacheManager cacheManager;
     public CoronavirusServiceImpl(CacheManager cacheManager) {
@@ -23,6 +23,7 @@ public class CoronavirusServiceImpl {
      * @return Object containing all real-time Coronavirus statistics.
      * @throws IOException error connecting to api.
      */
+    @Override
     public List<CovidData> getAllData() throws Exception {
         return cacheManager.get(ALL, new TypeReference<List<CovidData>>() {});
     }
@@ -31,6 +32,7 @@ public class CoronavirusServiceImpl {
      * @return Object containing just the key real-time Coronavirus statistics.
      * @throws IOException error connecting to api.
      */
+    @Override
     public LatestData getLatestData() throws Exception {
         if (cacheManager.invalid(LATEST)) {
             return cacheManager.get(LATEST, LatestData.class);

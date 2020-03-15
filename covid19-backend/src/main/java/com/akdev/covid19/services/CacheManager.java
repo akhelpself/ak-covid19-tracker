@@ -1,14 +1,12 @@
 package com.akdev.covid19.services;
 
-import com.akdev.covid19.CSVReader;
+import com.akdev.covid19.utils.CSVReader;
 import com.akdev.covid19.model.CovidData;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.*;

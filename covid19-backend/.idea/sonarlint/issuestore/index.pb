@@ -19,3 +19,6 @@ j
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 t
 Dsrc/main/java/com/akdev/covid19/services/CoronavirusServiceImpl.java,8\0\8046d9f3a3d651f9412cfcc8d2987073bff0dbda
+:
+
+.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302

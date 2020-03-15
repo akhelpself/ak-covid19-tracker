@@ -1,0 +1,31 @@
+{
+  "short_name": "AKCovid19 Tracker",
+  "name": "akcovid19.com",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/images/icons-48.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "/images/icons-96.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "/images/icons-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/icons-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "start_url": "/",
+  "scope": "/"
+}

@@ -1,0 +1,48 @@
+{% extends 'base' %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/css/bulma.min.css">
+<link rel="stylesheet" type="text/css" href="/css/main.css">
+<link rel="stylesheet" type="text/css" href="/css/bulma-docs.min.css">
+<style>
+    .box {
+        background-color: #eef3fc;
+    }
+</style>
+{% endblock style %}
+
+<!-- CONTENT BLOCK -->
+{% block content %}
+
+<div class="columns">
+
+    <div class="column">
+        <a class="box social has-text-centered" href="#">
+            <p class="title is-4">Confirmed</p>
+            <p class="subtitle is-2 is-marginless has-text-warning">{{latestData.confirmed | numberformat("###,###,###")}}</p>
+        </a>
+    </div>
+
+    <div class="column">
+        <a class="box social has-text-centered" href="#">
+            <p class="title is-4">Deaths</p>
+            <p class="subtitle is-2 is-marginless has-text-danger">{{latestData.deaths | numberformat("###,###,###")}}</p>
+        </a>
+    </div>
+
+    <div class="column">
+        <a class="box social has-text-centered" href="#">
+            <p class="title is-4">Recovered</p>
+            <p class="subtitle is-2 is-marginless has-text-success">{{latestData.recovered | numberformat("###,###,###")}}</p>
+        </a>
+    </div>
+
+</div>
+
+{% endblock content %}
+
+<!-- SCRIPT BLOCK -->
+{% block script_footer %}
+
+{% endblock script_footer %}

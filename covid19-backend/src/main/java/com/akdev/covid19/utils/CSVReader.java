@@ -1,4 +1,4 @@
-package com.akdev.covid19;
+package com.akdev.covid19.utils;
 
 import com.akdev.covid19.model.Coordinates;
 import com.akdev.covid19.model.CovidData;

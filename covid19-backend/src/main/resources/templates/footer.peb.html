@@ -1,0 +1,83 @@
+<section>
+
+</section>
+
+<style>
+    .cookie-notice {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin-bottom: 0 !important;
+        z-index: 999;
+        background-color: #ffdd57;
+    }
+    .notification{
+        transition: opacity 500ms;
+    }
+    .notification.fadeOut {
+        opacity: 0;
+    }
+</style>
+<div class="notification is-warning cookie-notice" id="layout-cookie" hidden>
+    <p class="has-text-centered">
+        By using our site, you acknowledge that you have read and understand our <a href="/cookie-policy" target="_blank" rel="nofollow">Cookie Policy</a>,
+        <a href="/privacy-policy" target="_blank" rel="nofollow">Privacy Policy</a>, and our <a href="/terms" target="_blank" rel="nofollow">Terms of Service.</a>
+        <button id="btn-cookie" class="delete" type="button"></button>
+    </p>
+</div>
+
+<script>
+    if(!getCookie('js-gdpr-consent-banner')) {
+        document.getElementById('layout-cookie').removeAttribute('hidden')
+    }
+
+    const close = document.querySelector("#btn-cookie");
+    close.addEventListener('click', function(){
+        document.getElementById('layout-cookie').classList.add('fadeOut');
+        setTimeout(function(){
+            parent.remove();
+        }, 500);
+        setCookie('js-gdpr-consent-banner', '1');
+    });
+</script>
+
+<footer class="footer" style="padding: 1.25rem">
+    <div class="container">
+        <br/>
+        <p style="text-align: center; margin-bottom: 10px">
+            <a style="color: #2E70DB" href="/privacy-policy" rel="nofollow">Privacy Policy</a>
+            | <a style="color: #2E70DB" href="/terms" rel="nofollow">Terms of Service</a>
+            | <a style="color: #2E70DB" href="mailto:akdev.pro@gmail.com" rel="nofollow">Contact Us</a>
+            | <a style="color: #2E70DB" href="/dmca" rel="nofollow">Cookie Policy</a>
+        </p>
+        <p>
+        <div class="follow-us has-text-centered">
+            <div class="st-top">
+                <span>Follow us:</span>
+            </div>
+            <div class="st-btn" data-network="facebook" style="display: inline-block;">
+                <a href="https://www.facebook.com/Covid-19-102632284704922" target="_blank" rel="noopener">
+                    <img class="lzl" src="/images/default.gif" data-src="https://platform-cdn.sharethis.com/img/facebook-white.svg" alt="<->">
+                </a>
+            </div>
+            <div class="st-btn" data-network="twitter" style="display: inline-block;">
+                <a href="https://www.twitter.com/AKDevTeam1" target="_blank" rel="noopener">
+                    <img class="lzl" src="/images/default.gif" data-src="https://platform-cdn.sharethis.com/img/twitter-white.svg" alt="<->">
+                </a>
+            </div>
+            <div class="st-btn" data-network="telegram" style="display: inline-block;">
+                <a href="https://t.me/covid19" target="_blank" rel="noopener">
+                    <img class="lzl" src="/images/default.gif" data-src="https://platform-cdn.sharethis.com/img/telegram-white.svg" alt="<->">
+                </a>
+            </div>
+        </div>
+        </p>
+        <p style="text-align: center; margin-bottom: 10px">
+            © 2020 AK Dev Team. All rights reserved.
+        </p>
+        <p style="text-align: center; margin-bottom: 10px">
+            Your best website to track coronarivus, 100% secure and trust, completely free service.
+        </p>
+    </div>
+</footer>
