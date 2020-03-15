@@ -1,5 +1,7 @@
 package com.akdev.covid19tracker.ui.home;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +46,16 @@ public class HomeFragment extends Fragment {
             tvConfirmed.setText(decimalFormat.format(latestData.getConfirmed()));
             tvDeaths.setText(decimalFormat.format(latestData.getDeaths()));
             tvRecovered.setText(decimalFormat.format(latestData.getRecovered()));
+        });
+
+        homeViewModel.getDialog().observe(getViewLifecycleOwner(), dialogMsg -> {
+            AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+            alertDialog.setTitle(getString(R.string.dialog_error_header));
+            alertDialog.setMessage(dialogMsg);
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    (dialog, which) -> dialog.dismiss()
+            );
+            alertDialog.show();
         });
         return root;
     }

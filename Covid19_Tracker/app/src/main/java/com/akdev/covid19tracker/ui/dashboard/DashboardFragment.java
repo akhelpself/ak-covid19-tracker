@@ -1,5 +1,6 @@
 package com.akdev.covid19tracker.ui.dashboard;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,6 @@ import com.akdev.covid19tracker.ui.dashboard.adapter.DashboardAdapter;
 public class DashboardFragment extends Fragment {
 
     private DashboardViewModel dashboardViewModel;
-
     private DashboardAdapter dashboardAdapter;
 
     @BindView(R.id.rvDashboard)
@@ -38,6 +38,16 @@ public class DashboardFragment extends Fragment {
             manager.setOrientation(LinearLayoutManager.VERTICAL);
             rvDashboard.setLayoutManager(manager);
             rvDashboard.setAdapter(dashboardAdapter);
+        });
+
+        dashboardViewModel.getDialog().observe(getViewLifecycleOwner(), dialogMsg -> {
+            AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+            alertDialog.setTitle(getString(R.string.dialog_error_header));
+            alertDialog.setMessage(dialogMsg);
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    (dialog, which) -> dialog.dismiss()
+            );
+            alertDialog.show();
         });
         return root;
     }

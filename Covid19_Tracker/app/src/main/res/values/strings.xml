@@ -110,4 +110,6 @@
     </string>
     <string name="symptoms_source">Source: www.cdc.gov</string>
 
+    <string name="dialog_error_header">Error!</string>
+    <string name="dialog_cannot_get_data">Cannot get data from server!</string>
 </resources>

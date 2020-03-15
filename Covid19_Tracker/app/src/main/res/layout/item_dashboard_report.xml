@@ -31,9 +31,9 @@
                     android:layout_marginEnd="4dp"/>
 
                 <TextView
+                    android:id="@+id/tvCountry"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Vietnam" />
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
@@ -52,12 +52,16 @@
                     android:layout_marginEnd="4dp"/>
 
                 <TextView
+                    android:id="@+id/tvProvince"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Vietnam" />
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="1dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -69,8 +73,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -81,9 +84,9 @@
                     android:layout_marginEnd="4dp"/>
 
                 <TextView
+                    android:id="@+id/tvConfirmed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="123.232"
                     android:textColor="@android:color/holo_orange_dark"/>
 
             </LinearLayout>
@@ -92,8 +95,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -104,9 +106,9 @@
                     android:layout_marginEnd="4dp"/>
 
                 <TextView
+                    android:id="@+id/tvDeaths"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="123.232"
                     android:textColor="@android:color/holo_red_dark"/>
 
             </LinearLayout>
@@ -115,8 +117,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -127,9 +128,9 @@
                     android:layout_marginEnd="4dp"/>
 
                 <TextView
+                    android:id="@+id/tvRecovered"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="123.232"
                     android:textColor="@android:color/holo_green_dark"/>
 
             </LinearLayout>
