@@ -1,0 +1,171 @@
+{% extends 'base' %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/css/bulma.min.css">
+<link rel="stylesheet" type="text/css" href="/css/main.css">
+<link rel="stylesheet" type="text/css" href="/css/bulma-docs.min.css">
+<style>
+    thead tr th:first-child,
+    tbody tr td:first-child {
+        width: 8em;
+        min-width: 8em;
+        max-width: 8em;
+        word-break: break-all;
+    }
+</style>
+{% endblock style %}
+
+<!-- CONTENT BLOCK -->
+{% block content %}
+<div class="card">
+    <header class="card-header">
+        <p class="card-header-title">Get Latest</p>
+    </header>
+    <div class="card-content">
+        <div class="content">
+            <p>Getting confirmed cases, deaths, and recoveries:</p>
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <tbody>
+                    <tr>
+                        <td>Method</td>
+                        <td>
+                            <code>
+                                GET
+                            </code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Path</td>
+                        <td>
+                            <code>
+                                /latest
+                            </code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Response:</td>
+                        <td>
+                            <code>
+                                {"confirmed":156099,"deaths":5819,"recovered":72624}
+                            </code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Status</td>
+                        <td>
+                            <span class="tag is-success">Available</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <footer class="card-footer">
+        <a href="/latest" class="card-footer-item">Try now</a>
+    </footer>
+</div>
+
+<br/>
+<div class="card">
+    <header class="card-header">
+        <p class="card-header-title">Get All</p>
+    </header>
+    <div class="card-content">
+        <div class="content">
+            <p>Getting all confirmed cases, deaths, and recoveries by country/province:</p>
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <tbody>
+                <tr>
+                    <td>Method</td>
+                    <td>
+                        <code>
+                            GET
+                        </code>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Path</td>
+                    <td>
+                        <code>
+                            /all
+                        </code>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Response</td>
+                    <td>
+                        <code>
+                            [{"last_updated":"2020-03-14T10:13:09","confirmed":67790,"deaths":3075,"recovered":52960,"data":{"coordinates":{"lat":"30.9756","lng":"112.2707"},"country":"China","country_code":null,"history":null,"province":"Hubei"}},...]
+                        </code>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td>
+                        <span class="tag is-success">Available</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <footer class="card-footer">
+        <a href="/all" class="card-footer-item">Try now</a>
+    </footer>
+</div>
+
+<br/>
+<div class="card">
+    <header class="card-header">
+        <p class="card-header-title">Get history</p>
+    </header>
+    <div class="card-content">
+        <div class="content">
+            <p>Getting history of confirmed cases, deaths, and recoveries by date</p>
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <tbody>
+                <tr>
+                    <td>Method</td>
+                    <td>
+                        <code>
+                            GET
+                        </code>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Path</td>
+                    <td>
+                        <code>
+                            /history
+                        </code>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Response</td>
+                    <td>
+                        <code>
+                            {}
+                        </code>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td>
+                        <span class="tag is-warning">Development</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+<!-- SCRIPT BLOCK -->
+{% block script_footer %}
+
+{% endblock script_footer %}

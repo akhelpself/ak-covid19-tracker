@@ -1,0 +1,115 @@
+{% extends 'base' %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/css/bulma.min.css">
+<link rel="stylesheet" type="text/css" href="/css/main.css">
+<link rel="stylesheet" type="text/css" href="/css/bulma-docs.min.css">
+<style>
+    .box {
+        background-color: #eef3fc;
+    }
+    .table__wrapper {
+        overflow-x: auto;
+    }
+</style>
+{% endblock style %}
+
+<!-- CONTENT BLOCK -->
+{% block content %}
+
+<h1 class="title is-3">COVID-19</h1>
+<h2 class="subtitle is-5">Coronavirus tracker</h2>
+<div class="columns">
+    <div class="column">
+        <a class="box social has-text-centered" href="#">
+            <p class="title is-4">Confirmed</p>
+            <p class="subtitle is-2 is-marginless has-text-warning">{{latestData.confirmed | numberformat("###,###,###")}}</p>
+        </a>
+    </div>
+
+    <div class="column">
+        <a class="box social has-text-centered" href="#">
+            <p class="title is-4">Deaths</p>
+            <p class="subtitle is-2 is-marginless has-text-danger">{{latestData.deaths | numberformat("###,###,###")}}</p>
+        </a>
+    </div>
+
+    <div class="column">
+        <a class="box social has-text-centered" href="#">
+            <p class="title is-4">Recovered</p>
+            <p class="subtitle is-2 is-marginless has-text-success">{{latestData.recovered | numberformat("###,###,###")}}</p>
+        </a>
+    </div>
+</div>
+
+<a class="button is-primary is-fullwidth" href="/analysis">
+    <i class="fa fa-line-chart"></i>&nbsp;Go to Analystics</a>
+
+<section>
+    <div class="table__wrapper">
+        <table class="table is-fullwidth">
+            <thead>
+            <tr>
+                <th>Province</th>
+                <th>Country</th>
+                <th>Confirmed</th>
+                <th>Deaths</th>
+                <th>Recovered</th>
+                <th>Lat</th>
+                <th>Lng</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in dataList %}
+            <tr>
+                <td>{{item.location.province}}</td>
+                <td>{{item.location.country}}</td>
+                <td>
+                    <strong><p class="has-text-warning">{{item.confirmed | numberformat("###,###,###")}}</p></strong>
+                </td>
+                <td>
+                    <strong><p class="has-text-danger">{{item.deaths | numberformat("###,###,###")}}</p></strong>
+                </td>
+                <td>
+                    <strong><p class="has-text-success">{{item.recovered | numberformat("###,###,###")}}</p></strong>
+                </td>
+                <td>
+                    {{item.location.coordinates.lat}}
+                </td>
+                <td>
+                    {{item.location.coordinates.lng}}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<h2 class="title is-3">Reference:</h2>
+<section>
+    <p> - The data comes from the <a href="https://github.com/CSSEGISandData/2019-nCoV">2019 Novel Coronavirus (nCoV) Data Repository, provided
+        by JHU CCSE</a>. It is
+        programmatically retrieved, re-formatted and stored in the cache for one hour.</p>
+
+    <br>
+    <p>
+        - <a href="https://docs.google.com/spreadsheets/d/1jS24DjSPVWa4iuxuD4OAXrE3QeI8c9BC1hSlqr-NMiU/edit#gid=1187587451">Kudos to DXY.cn</a>
+        has detailed information such as summary, age, gender, symtoms for some cases and
+    </p>
+</section>
+
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v6.0&appId=535007737144349&autoLogAppEvents=1"></script>
+<div class="fb-comments" data-href="{{headerUrl}}" data-width="100%"  data-numposts="10" data-order-by="reverse_time"></div>
+
+{% endblock content %}
+
+
+
+
+<!-- SCRIPT BLOCK -->
+{% block script_footer %}
+
+{% endblock script_footer %}

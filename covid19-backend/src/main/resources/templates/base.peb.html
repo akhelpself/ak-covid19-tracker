@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="{{headerDescription}}">
+    <meta name="keywords" content="{{headerKeywords}}">
+    <meta name="robots" content="All,index,follow">
+
+    <title>{{headerTitle}}</title>
+
+    <meta name="format-detection" content = "telephone=no">
+    <link rel="shortcut icon" type="image/png" href="/images/icon.ico"/>
+
+    <meta property="og:type" content="website">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="{{headerUrl}}">
+    <meta property="og:title" content="{{headerTitle}}">
+    <meta property="og:description" content="{{headerDescription}}">
+    <meta name="twitter:title" content="{{headerTitle}}">
+    <meta name="twitter:description" content="{{headerDescription}}">
+    <meta property="og:image" content="{{headerThumbnailUrl}}">
+    <meta name="twitter:image" content="{{headerThumbnailUrl}}">
+
+    <meta name="theme-color" content="#ffffff">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="msapplication-starturl" content="/">
+    <meta property="fb:app_id" content="535007737144349">
+
+    {% block style %}
+    {% endblock style %}
+    <!-- Script block -->
+    <link rel="preconnect" href="//l.sharethis.com" crossorigin>
+    <link rel="manifest" crossorigin="anonymous" href="/manifest.json?v=1">
+    <link rel="apple-touch-icon" href="/images/icons-512.png" >
+
+    <style>
+        .follow-us a {
+            border-radius: 18px;
+            border: solid .5px #ccc;
+            cursor: pointer;
+            display: inline-block;
+            height: 28px;
+            line-height: 28px;
+            padding: 0 7px;
+            position: relative;
+            text-align: center;
+            top: 0;
+            vertical-align: top;
+            white-space: nowrap;
+        }
+        .follow-us a img {
+            height: 14px;
+            width: 14px;
+            position: relative;
+            top: 6px;
+            vertical-align: top
+        }
+    </style>
+    <script src="/js/main.min.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-160599799-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-160599799-1');
+    </script>
+
+    {% block script %}
+    {% endblock script %}
+</head>
+<body class="has-navbar-fixed-top landing">
+
+{% include 'header' %}
+
+<section class="section">
+    <div class="container">
+        {% block content %}
+
+        {% endblock content %}
+    </div>
+</section>
+
+{% include 'footer' %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const navbarBurger = document.getElementById('navbarBurger');
+        navbarBurger.addEventListener('click', function() {
+            document.querySelector('.navbar-menu').classList.toggle('is-active');
+        });
+
+        if (typeof loadFormatList === 'function') {
+            loadFormatList();
+        }
+        lazyImage();
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js?v1');
+        }
+    });
+
+    (function() {
+        let lazyLoad = false;
+
+        function onLazyLoad() {
+            if (lazyLoad === false) {
+                lazyLoad = true;
+                document.removeEventListener('scroll', onLazyLoad);
+                document.removeEventListener('mousemove', onLazyLoad);
+                document.removeEventListener('mousedown', onLazyLoad);
+                document.removeEventListener('touchstart', onLazyLoad);
+                downloadJSAtOnload('//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5e6e9817a926f2cb');
+            }
+        }
+        document.addEventListener("scroll", onLazyLoad);
+        document.addEventListener("mousemove", onLazyLoad);
+        document.addEventListener("mousedown", onLazyLoad);
+        document.addEventListener("touchstart", onLazyLoad);
+        document.addEventListener("load", () => {
+            onLazyLoad();
+        });
+    })();
+
+</script>
+{% block script_footer %}
+
+{% endblock script_footer %}
+
+</body>

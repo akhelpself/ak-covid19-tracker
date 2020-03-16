@@ -1,0 +1,40 @@
+.icon-green {
+    color: green;
+}
+
+.avatar {
+    border-radius: 999px;
+}
+
+.logo-font {
+    font-weight: 700;
+    font-family: "Comic Sans MS";
+    font-size: large;
+}
+
+.is-vertical-center {
+    height: 100vh;
+    padding: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.aligner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.aligner-item {
+    max-width: 50%;
+}
+
+.title-3-lines {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
