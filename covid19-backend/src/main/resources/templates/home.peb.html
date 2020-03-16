@@ -43,6 +43,9 @@
     </div>
 </div>
 
+<a class="button is-primary is-fullwidth" href="/analysis">
+    <i class="fa fa-line-chart"></i>&nbsp;Go to Analystics</a>
+
 <section>
     <div class="table__wrapper">
         <table class="table is-fullwidth">
@@ -86,15 +89,24 @@
 
 <h2 class="title is-3">Reference:</h2>
 <section>
-    <p>The data comes from the <a href="https://github.com/CSSEGISandData/2019-nCoV">2019 Novel Coronavirus (nCoV) Data Repository, provided
+    <p> - The data comes from the <a href="https://github.com/CSSEGISandData/2019-nCoV">2019 Novel Coronavirus (nCoV) Data Repository, provided
         by JHU CCSE</a>. It is
         programmatically retrieved, re-formatted and stored in the cache for one hour.</p>
+
+    <br>
+    <p>
+        - <a href="https://docs.google.com/spreadsheets/d/1jS24DjSPVWa4iuxuD4OAXrE3QeI8c9BC1hSlqr-NMiU/edit#gid=1187587451">Kudos to DXY.cn</a>
+        has detailed information such as summary, age, gender, symtoms for some cases and
+    </p>
 </section>
-{% endblock content %}
 
 <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v6.0&appId=535007737144349&autoLogAppEvents=1"></script>
 <div class="fb-comments" data-href="{{headerUrl}}" data-width="100%"  data-numposts="10" data-order-by="reverse_time"></div>
+
+{% endblock content %}
+
+
 
 
 <!-- SCRIPT BLOCK -->

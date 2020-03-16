@@ -14,7 +14,7 @@ public class CoreController extends BaseController {
     private static final String DEFAULT_HEADER_TITLE = "AK Covid19 Tracker: Coronavirus tracker and update latest information";
     private static final String DEFAULT_HEADER_THUMBNAIL = "/images/cover.png";
     private static final String DEFAULT_DESCRIPTION = "AK Covid19 Tracker: Coronavirus free application to track and update latest information";
-    private static final String DEFAULT_DEFAULT_URL = "https://akcovid19.com";
+    private static final String DEFAULT_DEFAULT_URL = "https://akcovid.com";
     private static final String DEFAULT_HEADER_KEYWORDS = "covid19, coronavirus tracker, covid19 update";
 
     private static final String ERROR_CODE = "errorCode";
