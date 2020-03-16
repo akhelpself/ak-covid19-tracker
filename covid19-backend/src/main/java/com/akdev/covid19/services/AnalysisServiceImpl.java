@@ -6,6 +6,7 @@ import com.akdev.covid19.model.ChartDataSets;
 import com.akdev.covid19.model.CovidData;
 import com.akdev.covid19.model.CovidUser;
 import com.akdev.covid19.utils.Constant;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
@@ -32,11 +33,13 @@ public class AnalysisServiceImpl implements AnalysisService {
     private static final int INDEX_EXPOSURE_START = 13;
     private static final int INDEX_DEATH = 18;
 
+    private static final String CACHE_USER_DATA = "CACHE_USER_DATA";
     private static final String CACHE_DEATH_BY_AGE = "DEATH_BY_AGE";
     private static final String CACHE_CONFIRMED_BY_AGE = "CONFIRMED_BY_AGE";
     private static final String CACHE_CONFIRMED_BY_COUNTRY = "CONFIRMED_BY_COUNTRY";
     private static final String CACHE_DEATHS_BY_COUNTRY = "DEATHS_BY_COUNTRY";
     private static final String CACHE_RECOVERED_BY_COUNTRY = "RECOVERED_BY_COUNTRY";
+    private static final String CONFIRMED_BY_GENDER = "CONFIRMED_BY_GENDER";
 
     private CacheManager cacheManager;
     private CoronavirusService coronavirusService;
@@ -47,6 +50,35 @@ public class AnalysisServiceImpl implements AnalysisService {
         this.coronavirusService = coronavirusService;
     }
 
+    @Override
+    @SuppressWarnings("Duplicates")
+    public ChartData groupConfirmedByGender() throws Exception {
+        if (cacheManager.invalid(CONFIRMED_BY_GENDER)) {
+            return cacheManager.get(CONFIRMED_BY_GENDER, ChartData.class);
+        }
+
+        final Map<String, Integer> group = new HashMap<>();
+        parseData()
+            .forEach(x -> {
+                int v = group.getOrDefault(x.getGender(), 0);
+                if (x.getGender() == null || !x.getGender().equals("male") && !x.getGender().equals("female")) {
+                    x.setGender("undefined");
+                }
+                group.put(x.getGender(), ++v);
+            });
+
+
+        ChartDataSets dataSets= new ChartDataSets();
+        dataSets.setData(group.values().stream().map(Integer::doubleValue).collect(Collectors.toList()));
+        dataSets.setLabel("Confirmed by Gender");
+        dataSets.setBackgroundColor(new String[]{Constant.COLOR_GREEN, Constant.COLOR_ORANGE});
+        dataSets.setBorderWidth(1);
+        ChartData data = new ChartData();
+        data.setDatasets(new ChartDataSets[]{dataSets});
+        data.setLabels(new ArrayList<>(group.keySet()));
+        cacheManager.put(CONFIRMED_BY_GENDER, data);
+        return data;
+    }
 
     @Override
     @SuppressWarnings("Duplicates")
@@ -62,10 +94,10 @@ public class AnalysisServiceImpl implements AnalysisService {
                         Collectors.summingInt(CovidData::getRecovered)
                 ));
 
-        group = sortByValue(group, 10);
+        group = sortByValue(group, 20);
         ChartDataSets dataSets= new ChartDataSets();
         dataSets.setData(group.values().stream().map(Integer::doubleValue).collect(Collectors.toList()));
-        dataSets.setLabel("Recovered by country (Top 10)");
+        dataSets.setLabel("Recovered by country (Top 20)");
         dataSets.setBackgroundColor(Constant.COLOR_GREEN);
         dataSets.setBorderWidth(1);
         ChartData data = new ChartData();
@@ -89,10 +121,10 @@ public class AnalysisServiceImpl implements AnalysisService {
                         Collectors.summingInt(CovidData::getDeaths)
                 ));
 
-        group = sortByValue(group, 10);
+        group = sortByValue(group, 20);
         ChartDataSets dataSets= new ChartDataSets();
         dataSets.setData(group.values().stream().map(Integer::doubleValue).collect(Collectors.toList()));
-        dataSets.setLabel("Deaths by country (Top 10)");
+        dataSets.setLabel("Deaths by country (Top 20)");
         dataSets.setBackgroundColor(Constant.COLOR_RED);
         dataSets.setBorderWidth(1);
         ChartData data = new ChartData();
@@ -116,10 +148,10 @@ public class AnalysisServiceImpl implements AnalysisService {
                         Collectors.summingInt(CovidData::getConfirmed)
                 ));
 
-        group = sortByValue(group, 10);
+        group = sortByValue(group, 20);
         ChartDataSets dataSets= new ChartDataSets();
         dataSets.setData(group.values().stream().map(Integer::doubleValue).collect(Collectors.toList()));
-        dataSets.setLabel("Confirmed by country (Top 10)");
+        dataSets.setLabel("Confirmed by country (Top 20)");
         dataSets.setBackgroundColor(Constant.COLOR_ORANGE);
         dataSets.setBorderWidth(1);
         ChartData data = new ChartData();
@@ -226,6 +258,14 @@ public class AnalysisServiceImpl implements AnalysisService {
 
     private List<CovidUser> parseData() {
         List<CovidUser> results = new ArrayList<>();
+        if (cacheManager.invalid(CACHE_USER_DATA)) {
+            try {
+                return cacheManager.get(CACHE_USER_DATA, new TypeReference<List<CovidUser>>() {
+                });
+            } catch (Exception e) {
+                logger.error(e);
+            }
+        }
         try (InputStream inputStream = MainScript.class.getClassLoader().getResourceAsStream("Kudos_report.xlsx")) {
             Workbook workbook = new XSSFWorkbook(inputStream);
             Sheet datatypeSheet = workbook.getSheetAt(0);
@@ -276,6 +316,8 @@ public class AnalysisServiceImpl implements AnalysisService {
         } catch (Exception e) {
             logger.error(e);
         }
+
+        cacheManager.put(CACHE_USER_DATA, results);
         return results;
     }
 }

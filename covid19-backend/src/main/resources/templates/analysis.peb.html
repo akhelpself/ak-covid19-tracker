@@ -33,26 +33,41 @@
     <div class="column">
         <div class="card">
             <div class="card-content">
-                <canvas id="chartConfirmedByCountry" height="400"></canvas>
+                <canvas id="chartConfirmedByCountry" height="600"></canvas>
             </div>
         </div>
     </div>
     <div class="column">
         <div class="card">
             <div class="card-content">
-                <canvas id="chartDeathsByCountry" height="400"></canvas>
+                <canvas id="chartDeathsByCountry" height="600"></canvas>
             </div>
         </div>
     </div>
     <div class="column">
         <div class="card">
             <div class="card-content">
-                <canvas id="chartRecoveredByCountry" height="400"></canvas>
+                <canvas id="chartRecoveredByCountry" height="600"></canvas>
             </div>
         </div>
     </div>
 </div>
 
+<h2 class="title is-3">3. Analysis by gender</h2>
+<div class="columns">
+    <div class="column">
+        <div class="card">
+            <div class="card-content">
+                <canvas id="chartConfirmedByGender" ></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="column">
+
+    </div>
+    <div class="column">
+    </div>
+</div>
 {% endblock content %}
 
 <!-- SCRIPT BLOCK -->
@@ -65,6 +80,7 @@
         buildChart('chartConfirmedByCountry','/api/confirmed-by-country', 'horizontalBar');
         buildChart('chartDeathsByCountry','/api/deaths-by-country', 'horizontalBar');
         buildChart('chartRecoveredByCountry','/api/recovered-by-country', 'horizontalBar');
+        buildChart('chartConfirmedByGender','/api/confirmed-by-gender', 'pie');
     });
 
     function buildChart(id, url, type) {

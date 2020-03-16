@@ -10,5 +10,5 @@ public class ChartDataSets {
     private String label;
     private List<Double> data;
     private int borderWidth;
-    private String backgroundColor;
+    private Object backgroundColor;
 }

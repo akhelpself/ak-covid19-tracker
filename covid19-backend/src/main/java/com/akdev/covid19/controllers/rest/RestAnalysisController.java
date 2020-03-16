@@ -40,4 +40,9 @@ public class RestAnalysisController {
     public ResponseEntity recoveredByCountry() throws Exception {
         return ResponseEntity.ok(analysisService.groupRecoveredByCountry());
     }
+
+    @GetMapping(value = "/confirmed-by-gender")
+    public ResponseEntity confirmedByGender() throws Exception {
+        return ResponseEntity.ok(analysisService.groupConfirmedByGender());
+    }
 }

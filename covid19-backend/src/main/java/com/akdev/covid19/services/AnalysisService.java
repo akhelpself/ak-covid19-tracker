@@ -12,4 +12,5 @@ public interface AnalysisService {
 
     ChartData groupRecoveredByCountry() throws Exception;
 
+    ChartData groupConfirmedByGender() throws Exception;
 }
