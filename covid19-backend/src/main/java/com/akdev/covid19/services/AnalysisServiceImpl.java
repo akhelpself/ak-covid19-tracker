@@ -15,6 +15,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
@@ -32,6 +33,7 @@ public class AnalysisServiceImpl implements AnalysisService {
     private static final int INDEX_HOSP_VISIT = 10;
     private static final int INDEX_EXPOSURE_START = 13;
     private static final int INDEX_DEATH = 18;
+    private static final int INDEX_SYMPTOM = 20;
 
     private static final String CACHE_USER_DATA = "CACHE_USER_DATA";
     private static final String CACHE_DEATH_BY_AGE = "DEATH_BY_AGE";
@@ -40,6 +42,8 @@ public class AnalysisServiceImpl implements AnalysisService {
     private static final String CACHE_DEATHS_BY_COUNTRY = "DEATHS_BY_COUNTRY";
     private static final String CACHE_RECOVERED_BY_COUNTRY = "RECOVERED_BY_COUNTRY";
     private static final String CONFIRMED_BY_GENDER = "CONFIRMED_BY_GENDER";
+    private static final String DEATHS_BY_GENDER = "DEATHS_BY_GENDER";
+    private static final String CONFIRMED_BY_SYMPTOM = "CONFIRMED_BY_SYMPTOM";
 
     private CacheManager cacheManager;
     private CoronavirusService coronavirusService;
@@ -48,6 +52,74 @@ public class AnalysisServiceImpl implements AnalysisService {
                                CoronavirusService coronavirusService) {
         this.cacheManager = cacheManager;
         this.coronavirusService = coronavirusService;
+    }
+
+
+    @Override
+    @SuppressWarnings("Duplicates")
+    public ChartData groupConfirmedBySymptom() throws Exception {
+        if (cacheManager.invalid(CONFIRMED_BY_SYMPTOM)) {
+            return cacheManager.get(CONFIRMED_BY_SYMPTOM, ChartData.class);
+        }
+
+        final Map<String, Integer> groupBySymptom = new HashMap<>();
+        parseData()
+                .stream()
+                .forEach(x -> {
+                    if (x.getSymptom() != null) {
+                        String[] s = x.getSymptom().split(",");
+                        Arrays.stream(s).forEach(s1 -> {
+                            Integer v = groupBySymptom.getOrDefault(s1.trim(), 0);
+                            groupBySymptom.put(s1.trim() , ++v);
+                        });
+                    }
+                });
+
+        Map<String, Integer> group = sortByValue(groupBySymptom, 20);
+
+
+        ChartDataSets dataSets= new ChartDataSets();
+        dataSets.setData(group.values().stream().map(Integer::doubleValue).collect(Collectors.toList()));
+        dataSets.setLabel("Confirmed by Symptom");
+        dataSets.setBackgroundColor(Constant.COLOR_ORANGE);
+        dataSets.setBorderWidth(1);
+        ChartData data = new ChartData();
+        data.setDatasets(new ChartDataSets[]{dataSets});
+        data.setLabels(new ArrayList<>(group.keySet()));
+        cacheManager.put(CONFIRMED_BY_SYMPTOM, data);
+        return data;
+    }
+
+    @Override
+    @SuppressWarnings("Duplicates")
+    public ChartData groupDeathsByGender() throws Exception {
+        if (cacheManager.invalid(DEATHS_BY_GENDER)) {
+            return cacheManager.get(DEATHS_BY_GENDER, ChartData.class);
+        }
+
+        final Map<String, Integer> group = new HashMap<>();
+        parseData()
+                .stream()
+                .filter(CovidUser::isDeath)
+                .forEach(x -> {
+                    int v = group.getOrDefault(x.getGender(), 0);
+                    if (x.getGender() == null || !x.getGender().equals("male") && !x.getGender().equals("female")) {
+                        x.setGender("undefined");
+                    }
+                    group.put(x.getGender(), ++v);
+                });
+
+
+        ChartDataSets dataSets= new ChartDataSets();
+        dataSets.setData(group.values().stream().map(Integer::doubleValue).collect(Collectors.toList()));
+        dataSets.setLabel("Deaths by Gender");
+        dataSets.setBackgroundColor(new String[]{Constant.COLOR_GREEN, Constant.COLOR_ORANGE});
+        dataSets.setBorderWidth(1);
+        ChartData data = new ChartData();
+        data.setDatasets(new ChartDataSets[]{dataSets});
+        data.setLabels(new ArrayList<>(group.keySet()));
+        cacheManager.put(DEATHS_BY_GENDER, data);
+        return data;
     }
 
     @Override
@@ -256,6 +328,7 @@ public class AnalysisServiceImpl implements AnalysisService {
     }
 
 
+    @Scheduled(fixedRate = 3600)
     private List<CovidUser> parseData() {
         List<CovidUser> results = new ArrayList<>();
         if (cacheManager.invalid(CACHE_USER_DATA)) {
@@ -307,6 +380,10 @@ public class AnalysisServiceImpl implements AnalysisService {
 
                     if (currentRow.getCell(INDEX_DEATH).getCellType() == CellType.NUMERIC) {
                         if (currentRow.getCell(INDEX_DEATH).getNumericCellValue() != 0) target.setDeath(true);
+                    }
+
+                    if (currentRow.getCell(INDEX_SYMPTOM) != null && currentRow.getCell(INDEX_SYMPTOM).getCellType() == CellType.STRING) {
+                        target.setSymptom(currentRow.getCell(INDEX_SYMPTOM).getStringCellValue());
                     }
                 } catch (Exception e) {
                     logger.error(e); //error parsing row - ignore it

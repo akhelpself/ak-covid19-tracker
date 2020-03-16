@@ -45,4 +45,17 @@ public class RestAnalysisController {
     public ResponseEntity confirmedByGender() throws Exception {
         return ResponseEntity.ok(analysisService.groupConfirmedByGender());
     }
+
+    @GetMapping(value = "/deaths-by-gender")
+    public ResponseEntity deathsByGender() throws Exception {
+        return ResponseEntity.ok(analysisService.groupDeathsByGender());
+    }
+
+    @GetMapping(value = "/confirmed-by-symptom")
+    public ResponseEntity confirmedBySymptom() throws Exception {
+        return ResponseEntity.ok(analysisService.groupConfirmedBySymptom());
+    }
+
+
+
 }

@@ -14,5 +14,7 @@ public class CovidUser {
     private Date exposureStart;
     private Date reportDate;
     private boolean death;
+    private String symptom;
+
 
 }

@@ -23,6 +23,8 @@ public class AnalysisController {
                 return "analysis/analysis_country";
             case "gender":
                 return "analysis/analysis_gender";
+            case "symptom":
+                return "analysis/analysis_symptom";
             default:
                 return "analysis/analysis_age";
         }
