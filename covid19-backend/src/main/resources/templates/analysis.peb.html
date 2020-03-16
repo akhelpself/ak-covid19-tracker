@@ -1,0 +1,92 @@
+{% extends 'base' %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/css/bulma.min.css">
+<link rel="stylesheet" type="text/css" href="/css/main.css">
+<link rel="stylesheet" type="text/css" href="/css/bulma-docs.min.css">
+{% endblock style %}
+
+<!-- CONTENT BLOCK -->
+{% block content %}
+
+<h2 class="title is-3">1. Analysis by Age</h2>
+<div class="columns">
+    <div class="column">
+        <div class="card">
+            <div class="card-content">
+                <canvas id="chartConfirmedByAge" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="card">
+            <div class="card-content">
+                <canvas id="chartDeathByAge" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 class="title is-3">2. Analysis by country</h2>
+<div class="columns">
+    <div class="column">
+        <div class="card">
+            <div class="card-content">
+                <canvas id="chartConfirmedByCountry" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="card">
+            <div class="card-content">
+                <canvas id="chartDeathsByCountry" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="card">
+            <div class="card-content">
+                <canvas id="chartRecoveredByCountry" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+<!-- SCRIPT BLOCK -->
+{% block script_footer %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        buildChart('chartDeathByAge','/api/death-by-age', 'bar');
+        buildChart('chartConfirmedByAge','/api/confirmed-by-age', 'bar');
+        buildChart('chartConfirmedByCountry','/api/confirmed-by-country', 'horizontalBar');
+        buildChart('chartDeathsByCountry','/api/deaths-by-country', 'horizontalBar');
+        buildChart('chartRecoveredByCountry','/api/recovered-by-country', 'horizontalBar');
+    });
+
+    function buildChart(id, url, type) {
+        const xmlhttp = new XMLHttpRequest();
+        let ctx = document.getElementById(id).getContext('2d');
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState === XMLHttpRequest.DONE) {
+                if (xmlhttp.status === 200) {
+                    new Chart(ctx, {
+                        type: type,
+                        data: JSON.parse(xmlhttp.responseText),
+                        options: {
+                            responsive: true
+                        }
+                    });
+                }
+            }
+        };
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+
+
+</script>
+{% endblock script_footer %}

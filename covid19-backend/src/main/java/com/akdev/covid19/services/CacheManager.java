@@ -51,12 +51,20 @@ public class CacheManager {
         t.put(k, System.currentTimeMillis());
     }
 
+    public void put(String k, Object v) {
+        try {
+            put(k, mapper.writeValueAsString(v));
+        } catch (Exception e) {
+            logger.error("put exception: {}", e);
+        }
+    }
+
     public boolean invalid(String key) {
         return t.containsKey(key) && expiredTimeValid(t.get(key));
     }
 
     private boolean expiredTimeValid(Long expiredTime) {
-        return System.currentTimeMillis() - expiredTime < 300000;
+        return System.currentTimeMillis() - expiredTime < 30 * 60 * 1000;
     }
 
 
