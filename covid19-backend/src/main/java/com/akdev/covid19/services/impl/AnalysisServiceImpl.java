@@ -61,22 +61,24 @@ public class AnalysisServiceImpl implements AnalysisService {
             return cacheManager.get(CONFIRMED_BY_SYMPTOM, ChartData.class);
         }
 
-        final Map<String, Integer> groupBySymptom = new HashMap<>();
-        parseData()
-                .forEach(x -> {
-                    if (x.getSymptom() != null) {
-                        String[] s = x.getSymptom().split(",");
-                        Arrays.stream(s).forEach(s1 -> {
-                            Integer v = groupBySymptom.getOrDefault(s1.trim(), 0);
-                            groupBySymptom.put(s1.trim() , ++v);
-                        });
-                    }
-                });
+        final Map<String, Double> groupBySymptom = new HashMap<>();
+        List<CovidUser> covidUserList = parseData()
+                .stream().filter(x -> x.getSymptom() != null)
+                .collect(Collectors.toList());
+        int l = covidUserList.size();
+        covidUserList.forEach(x -> {
+            String[] s = x.getSymptom().split(",");
+            Arrays.stream(s).forEach(s1 -> {
+                Double v = groupBySymptom.getOrDefault(s1.trim(), 0d);
+                double p = (v * l + 1) / l;
+                groupBySymptom.put(s1.trim(), p);
+            });
+        });
 
-        Map<String, Integer> group = MapUtils.sortIntByValue(groupBySymptom, 20);
+        Map<String, Double> group = MapUtils.sortDoubleByValue(groupBySymptom, 20, 1);
 
-        ChartDataSets dataSets= new ChartDataSets();
-        dataSets.setData(group.values().stream().map(Integer::doubleValue).collect(Collectors.toList()));
+        ChartDataSets dataSets = new ChartDataSets();
+        dataSets.setData(group.values().stream().map(x -> 100 * Math.round(x * 10000.0) / 10000.0).collect(Collectors.toList()));
         dataSets.setLabel("Confirmed by Symptom");
         dataSets.setBackgroundColor(Constant.COLOR_ORANGE);
         dataSets.setBorderWidth(1);
@@ -107,7 +109,7 @@ public class AnalysisServiceImpl implements AnalysisService {
                 });
 
 
-        ChartDataSets dataSets= new ChartDataSets();
+        ChartDataSets dataSets = new ChartDataSets();
         dataSets.setData(group.values().stream().map(Integer::doubleValue).collect(Collectors.toList()));
         dataSets.setLabel("Deaths by Gender");
         dataSets.setBackgroundColor(new String[]{Constant.COLOR_GREEN, Constant.COLOR_ORANGE});
@@ -128,16 +130,16 @@ public class AnalysisServiceImpl implements AnalysisService {
 
         final Map<String, Integer> group = new HashMap<>();
         parseData()
-            .forEach(x -> {
-                int v = group.getOrDefault(x.getGender(), 0);
-                if (x.getGender() == null || !x.getGender().equals("male") && !x.getGender().equals("female")) {
-                    x.setGender("undefined");
-                }
-                group.put(x.getGender(), ++v);
-            });
+                .forEach(x -> {
+                    int v = group.getOrDefault(x.getGender(), 0);
+                    if (x.getGender() == null || !x.getGender().equals("male") && !x.getGender().equals("female")) {
+                        x.setGender("undefined");
+                    }
+                    group.put(x.getGender(), ++v);
+                });
 
 
-        ChartDataSets dataSets= new ChartDataSets();
+        ChartDataSets dataSets = new ChartDataSets();
         dataSets.setData(group.values().stream().map(Integer::doubleValue).collect(Collectors.toList()));
         dataSets.setLabel("Confirmed by Gender");
         dataSets.setBackgroundColor(new String[]{Constant.COLOR_GREEN, Constant.COLOR_ORANGE});
@@ -164,7 +166,7 @@ public class AnalysisServiceImpl implements AnalysisService {
                 ));
 
         group = MapUtils.sortIntByValue(group, 20);
-        ChartDataSets dataSets= new ChartDataSets();
+        ChartDataSets dataSets = new ChartDataSets();
         dataSets.setData(group.values().stream().map(Integer::doubleValue).collect(Collectors.toList()));
         dataSets.setLabel("Recovered by country (Top 20)");
         dataSets.setBackgroundColor(Constant.COLOR_GREEN);
@@ -191,7 +193,7 @@ public class AnalysisServiceImpl implements AnalysisService {
                 ));
 
         group = MapUtils.sortIntByValue(group, 20);
-        ChartDataSets dataSets= new ChartDataSets();
+        ChartDataSets dataSets = new ChartDataSets();
         dataSets.setData(group.values().stream().map(Integer::doubleValue).collect(Collectors.toList()));
         dataSets.setLabel("Deaths by country (Top 20)");
         dataSets.setBackgroundColor(Constant.COLOR_RED);
@@ -218,7 +220,7 @@ public class AnalysisServiceImpl implements AnalysisService {
                 ));
 
         group = MapUtils.sortIntByValue(group, 20);
-        ChartDataSets dataSets= new ChartDataSets();
+        ChartDataSets dataSets = new ChartDataSets();
         dataSets.setData(group.values().stream().map(Integer::doubleValue).collect(Collectors.toList()));
         dataSets.setLabel("Confirmed by country (Top 20)");
         dataSets.setBackgroundColor(Constant.COLOR_ORANGE);
@@ -280,19 +282,19 @@ public class AnalysisServiceImpl implements AnalysisService {
 
         int s = dataList.size();
         dataList.stream().mapToInt(CovidUser::getAge)
-            .forEach(age ->
-                ageGroup.keySet().forEach(k -> {
-                    List<Integer> g = Arrays.stream(k.split("-"))
-                            .map(Integer::parseInt)
-                            .collect(Collectors.toList());
-                    if ((g.size() == 1 && g.get(0) < age) || (g.size() == 2 && g.get(0) < age && g.get(1) > age)) {
-                        double p = (ageGroup.get(k) * s + 1) / s;
-                        ageGroup.put(k, p);
-                    }
-                })
-            );
+                .forEach(age ->
+                        ageGroup.keySet().forEach(k -> {
+                            List<Integer> g = Arrays.stream(k.split("-"))
+                                    .map(Integer::parseInt)
+                                    .collect(Collectors.toList());
+                            if ((g.size() == 1 && g.get(0) < age) || (g.size() == 2 && g.get(0) < age && g.get(1) > age)) {
+                                double p = (ageGroup.get(k) * s + 1) / s;
+                                ageGroup.put(k, p);
+                            }
+                        })
+                );
 
-        ChartDataSets dataSets= new ChartDataSets();
+        ChartDataSets dataSets = new ChartDataSets();
         dataSets.setData(
                 ageGroup.values().stream().map(x -> x = 100 * Math.round(x * 10000.0) / 10000.0).collect(Collectors.toList())
         );
