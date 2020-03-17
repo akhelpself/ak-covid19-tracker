@@ -23,4 +23,8 @@ public class Location {
     @JsonProperty("province")
     private String province;
 
+    @Override
+    public String toString() {
+        return country + "/" + province;
+    }
 }

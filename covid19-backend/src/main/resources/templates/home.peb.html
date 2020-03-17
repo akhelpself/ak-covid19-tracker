@@ -20,6 +20,71 @@
 
 <h1 class="title is-3">COVID-19</h1>
 <h2 class="subtitle is-5">Coronavirus tracker</h2>
+
+<div class="columns">
+    <div class="column">
+        {% if notification.level == 3 %}
+        <div class="notification is-danger">
+            <button class="delete"></button>
+            <div class="columns">
+                <div class="column is-2 has-text-centered">
+                    <img src="/images/no-streesing.png">
+                </div>
+                <div class="column">
+                    <ul>
+                        <li>Your address: {{location.address}}</li>
+                        <li>The nearest epidemic center is: <strong>{{notification.distance}}</strong> kilometers ({{location.neatestLocation}})</li>
+                        <li>Status: <strong>Dangerous.</strong></li>
+                        <li>You should stay indoors to restrict the spread of covid-19</li>
+                    </ul>
+                    (<i>We are developing this feature from the dataset in Reference (below of page) so that it is only estimated.
+                    Feedback for us at: <a style="color: #2E70DB" href="mailto:akdev.pro@gmail.com" rel="nofollow">akdev.pro@gmail.com</a></i>)
+                </div>
+            </div>
+
+        </div>
+        {% elseif notification.level == 2 %}
+        <div class="notification is-warning">
+            <button class="delete"></button>
+            <div class="columns">
+                <div class="column is-2 has-text-centered">
+                    <img src="/images/error.png">
+                </div>
+                <div class="column">
+                    <ul>
+                        <li>Your address: {{location.address}}</li>
+                        <li>The nearest epidemic center is: <strong>{{notification.distance}}</strong> kilometers ({{location.neatestLocation}})</li>
+                        <li>Status: <strong>Warning.</strong></li>
+                        <li>You should stay indoors to restrict the spread of covid-19</li>
+                    </ul>
+                    (<i>We are developing this feature from the dataset in Reference (below of page) so that it is only estimated.
+                    Feedback for us at: <a style="color: #2E70DB" href="mailto:akdev.pro@gmail.com" rel="nofollow">akdev.pro@gmail.com</a></i>)
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="notification is-success">
+            <button class="delete"></button>
+            <div class="columns">
+                <div class="column is-2 has-text-centered">
+                    <img src="/images/shield.png">
+                </div>
+                <div class="column">
+                    <ul>
+                        <li>Your address: {{location.address}}</li>
+                        <li>The nearest epidemic center is: <strong>{{notification.distance}}</strong> kilometers ({{location.neatestLocation}})</li>
+                        <li>Status: <strong>Safety.</strong></li>
+                    </ul>
+                    (<i>We are developing this feature from the dataset in Reference (below of page) so that it is only estimated.
+                        Feedback for us at: <a style="color: #2E70DB" href="mailto:akdev.pro@gmail.com" rel="nofollow">akdev.pro@gmail.com</a></i>)
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
 <div class="columns">
     <div class="column">
         <a class="box social has-text-centered" href="#">
@@ -43,8 +108,24 @@
     </div>
 </div>
 
-<a class="button is-primary is-fullwidth" href="/analysis">
-    <i class="fa fa-line-chart"></i>&nbsp;Go to Analystics</a>
+<p>
+    <a class="button is-primary is-fullwidth" href="/analysis">
+        <i class="fa fa-line-chart"></i>&nbsp;Go to Analystics</a>
+</p><br><br>
+
+
+<div class="columns">
+    <div class="column">
+        <div class="field">
+            <p class="control has-icons-left">
+                <input class="input" type="text" id="textSearch" placeholder="Enter country or province...">
+                <span class="icon is-small is-left">
+            <i class="fa fa-search"></i>
+        </span>
+            </p>
+        </div>
+    </div>
+</div>
 
 <section>
     <div class="table__wrapper">
@@ -60,33 +141,12 @@
                 <th>Lng</th>
             </tr>
             </thead>
-            <tbody>
-            {% for item in dataList %}
-            <tr>
-                <td>{{item.location.province}}</td>
-                <td>{{item.location.country}}</td>
-                <td>
-                    <strong><p class="has-text-warning">{{item.confirmed | numberformat("###,###,###")}}</p></strong>
-                </td>
-                <td>
-                    <strong><p class="has-text-danger">{{item.deaths | numberformat("###,###,###")}}</p></strong>
-                </td>
-                <td>
-                    <strong><p class="has-text-success">{{item.recovered | numberformat("###,###,###")}}</p></strong>
-                </td>
-                <td>
-                    {{item.location.coordinates.lat}}
-                </td>
-                <td>
-                    {{item.location.coordinates.lng}}
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
+            <tbody id="dataTable"></tbody>
         </table>
     </div>
 </section>
 
+<hr/>
 <h2 class="title is-3">Reference:</h2>
 <section>
     <p> - The data comes from the <a href="https://github.com/CSSEGISandData/2019-nCoV">2019 Novel Coronavirus (nCoV) Data Repository, provided
@@ -98,7 +158,9 @@
         - <a href="https://docs.google.com/spreadsheets/d/1jS24DjSPVWa4iuxuD4OAXrE3QeI8c9BC1hSlqr-NMiU/edit#gid=1187587451">Kudos to DXY.cn</a>
         has detailed information such as summary, age, gender, symtoms for some cases and
     </p>
+    <br/>
 </section>
+
 
 <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v6.0&appId=535007737144349&autoLogAppEvents=1"></script>
@@ -111,5 +173,67 @@
 
 <!-- SCRIPT BLOCK -->
 {% block script_footer %}
+<script>
+    let dataTable = document.getElementById('dataTable');
+    let textSearch = document.getElementById('textSearch');
 
+    let items = [];
+    document.addEventListener('DOMContentLoaded', function () {
+        const xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState === XMLHttpRequest.DONE) {
+                if (xmlhttp.status === 200) {
+                    items = JSON.parse(xmlhttp.responseText);
+                    loadDataToTable(items);
+                }
+            }
+        };
+        xmlhttp.open("GET", '/all', true);
+        xmlhttp.send();
+
+        textSearch.addEventListener('keyup', function(event) {
+            let k = event.target.value;
+            if (k.length > 2) {
+                let results = Array.from(items).filter(x =>
+                    x.data.province.toLowerCase().indexOf(k.toLowerCase()) > -1
+                    || x.data.country.toLowerCase().indexOf(k.toLowerCase()) > -1
+                );
+                loadDataToTable(results);
+            }  else {
+                loadDataToTable(items);
+            }
+        })
+    });
+
+    function loadDataToTable(items) {
+        let html = '';
+        items.forEach(item => {
+            html += `
+                 <tr>
+                    <td>${item.data.province}</td>
+                    <td>${item.data.country}</td>
+                    <td>
+                        <strong><p class="has-text-warning">${item.confirmed}</p></strong>
+                    </td>
+                    <td>
+                        <strong><p class="has-text-danger">${item.deaths}</p></strong>
+                    </td>
+                    <td>
+                        <strong><p class="has-text-success">${item.recovered}</p></strong>
+                    </td>
+                    <td>
+                        ${item.data.coordinates.lat}
+                    </td>
+                    <td>
+                        ${item.data.coordinates.lng}
+                    </td>
+                </tr>`;
+        });
+        if (items.length === 0) {
+            html += `<tr>Not found!</tr>`
+        }
+        dataTable.innerHTML = html;
+    }
+
+</script>
 {% endblock script_footer %}
