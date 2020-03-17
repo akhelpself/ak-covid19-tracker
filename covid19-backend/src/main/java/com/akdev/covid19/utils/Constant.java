@@ -2,6 +2,9 @@ package com.akdev.covid19.utils;
 
 public class Constant {
 
+    public static final String DEFAULT_DEFAULT_URL = "https://akcovid.com";
+
+
     public static final String KEY_HEADER_TITLE = "headerTitle";
     public static final String KEY_HEADER_THUMBNAIL_URL = "headerThumbnailUrl";
     public static final String KEY_HEADER_DESCRIPTION = "headerDescription";
