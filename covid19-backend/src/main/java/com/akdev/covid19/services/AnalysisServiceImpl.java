@@ -9,11 +9,7 @@ import com.akdev.covid19.utils.Constant;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -64,7 +60,6 @@ public class AnalysisServiceImpl implements AnalysisService {
 
         final Map<String, Integer> groupBySymptom = new HashMap<>();
         parseData()
-                .stream()
                 .forEach(x -> {
                     if (x.getSymptom() != null) {
                         String[] s = x.getSymptom().split(",");
@@ -76,7 +71,6 @@ public class AnalysisServiceImpl implements AnalysisService {
                 });
 
         Map<String, Integer> group = sortByValue(groupBySymptom, 20);
-
 
         ChartDataSets dataSets= new ChartDataSets();
         dataSets.setData(group.values().stream().map(Integer::doubleValue).collect(Collectors.toList()));
@@ -233,7 +227,8 @@ public class AnalysisServiceImpl implements AnalysisService {
         return data;
     }
 
-    public static Map<String, Integer> sortByValue(Map<String, Integer> hm, int limit) {
+
+    private Map<String, Integer> sortByValue(Map<String, Integer> hm, int limit) {
         // Create a list from elements of HashMap
         List<Map.Entry<String, Integer> > list = new LinkedList<>(hm.entrySet());
 
@@ -253,6 +248,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 
     @Override
+    @SuppressWarnings("Duplicates")
     public ChartData groupByAge(String type) throws Exception {
         String keyCache = "";
         List<CovidUser> dataList = new ArrayList<>();
@@ -329,6 +325,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 
     @Scheduled(fixedRate = 3600)
+    @SuppressWarnings("Duplicates")
     private List<CovidUser> parseData() {
         List<CovidUser> results = new ArrayList<>();
         if (cacheManager.invalid(CACHE_USER_DATA)) {
@@ -352,34 +349,38 @@ public class AnalysisServiceImpl implements AnalysisService {
                 CovidUser target = new CovidUser();
 
                 try {
-                    if (currentRow.getCell(INDEX_AGE).getCellType() == CellType.NUMERIC) {
+                    if (currentRow.getCell(INDEX_AGE) != null
+                            && currentRow.getCell(INDEX_AGE).getCellType() == CellType.NUMERIC) {
                         target.setAge((int) currentRow.getCell(INDEX_AGE).getNumericCellValue());
                     } else continue;
 
-                    if (currentRow.getCell(INDEX_GENDER).getCellType() == CellType.STRING) {
+                    if (currentRow.getCell(INDEX_GENDER) != null
+                            && currentRow.getCell(INDEX_GENDER).getCellType() == CellType.STRING) {
                         target.setGender(currentRow.getCell(INDEX_GENDER).getStringCellValue());
                     } else continue;
 
-                    if (currentRow.getCell(INDEX_SYMPTOM_ONSET).getCellType() == CellType.NUMERIC) {
-                        if (HSSFDateUtil.isCellDateFormatted(currentRow.getCell(INDEX_SYMPTOM_ONSET))) {
-                            target.setSymptomOnset(currentRow.getCell(INDEX_SYMPTOM_ONSET).getDateCellValue());
-                        }
+                    if (currentRow.getCell(INDEX_GENDER) != null
+                            && currentRow.getCell(INDEX_SYMPTOM_ONSET).getCellType() == CellType.NUMERIC
+                            && DateUtil.isCellDateFormatted(currentRow.getCell(INDEX_SYMPTOM_ONSET))) {
+                        target.setSymptomOnset(currentRow.getCell(INDEX_SYMPTOM_ONSET).getDateCellValue());
                     }
 
-                    if (currentRow.getCell(INDEX_HOSP_VISIT).getCellType() == CellType.NUMERIC) {
-                        if (HSSFDateUtil.isCellDateFormatted(currentRow.getCell(INDEX_HOSP_VISIT))) {
-                            target.setSymptomOnset(currentRow.getCell(INDEX_HOSP_VISIT).getDateCellValue());
-                        }
+                    if (currentRow.getCell(INDEX_HOSP_VISIT) != null
+                            && currentRow.getCell(INDEX_HOSP_VISIT).getCellType() == CellType.NUMERIC
+                            && DateUtil.isCellDateFormatted(currentRow.getCell(INDEX_HOSP_VISIT))) {
+                        target.setSymptomOnset(currentRow.getCell(INDEX_HOSP_VISIT).getDateCellValue());
                     }
 
-                    if (currentRow.getCell(INDEX_EXPOSURE_START).getCellType() == CellType.NUMERIC) {
-                        if (HSSFDateUtil.isCellDateFormatted(currentRow.getCell(INDEX_EXPOSURE_START))) {
-                            target.setSymptomOnset(currentRow.getCell(INDEX_EXPOSURE_START).getDateCellValue());
-                        }
+                    if (currentRow.getCell(INDEX_EXPOSURE_START) != null
+                            && currentRow.getCell(INDEX_EXPOSURE_START).getCellType() == CellType.NUMERIC
+                            && DateUtil.isCellDateFormatted(currentRow.getCell(INDEX_EXPOSURE_START))) {
+                        target.setSymptomOnset(currentRow.getCell(INDEX_EXPOSURE_START).getDateCellValue());
                     }
 
-                    if (currentRow.getCell(INDEX_DEATH).getCellType() == CellType.NUMERIC) {
-                        if (currentRow.getCell(INDEX_DEATH).getNumericCellValue() != 0) target.setDeath(true);
+                    if (currentRow.getCell(INDEX_DEATH) != null
+                            && currentRow.getCell(INDEX_DEATH).getCellType() == CellType.NUMERIC
+                            && currentRow.getCell(INDEX_DEATH).getNumericCellValue() != 0) {
+                        target.setDeath(true);
                     }
 
                     if (currentRow.getCell(INDEX_SYMPTOM) != null && currentRow.getCell(INDEX_SYMPTOM).getCellType() == CellType.STRING) {

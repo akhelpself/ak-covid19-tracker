@@ -21,7 +21,6 @@ public class HomeController {
     @GetMapping
     public String home(Model model) throws Exception {
         model.addAttribute("latestData", coronavirusService.getLatestData());
-        model.addAttribute("dataList", coronavirusService.getAllData());
         return "home";
     }
 
