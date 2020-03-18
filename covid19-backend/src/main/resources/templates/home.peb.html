@@ -21,6 +21,20 @@
 <h1 class="title is-3">COVID-19</h1>
 <h2 class="subtitle is-5">Coronavirus tracker</h2>
 
+<div class="columns">
+    <div class="column">
+        <div class="field">
+            <p class="control has-icons-left">
+                <input id="pac-input" type="text" placeholder="Enter current your location" class="input is-fullwidth"/>
+                <span class="icon is-small is-left">
+                <i class="fa fa-map-marker"></i>
+        </span>
+            </p>
+        </div>
+    </div>
+</div>
+<br/>
+
 {% if notification != null %}
 <div class="columns">
     <div class="column">
@@ -28,13 +42,10 @@
         <div class="notification is-danger">
             <button class="delete"></button>
             <div class="columns">
-                <div class="column is-2 has-text-centered">
-                    <img data-src="/images/no-tresspasing.png">
-                </div>
                 <div class="column">
                     <ul>
                         <li>Your address: {{location.address}}</li>
-                        <li>The nearest epidemic center is: <strong>{{notification.distance}}</strong> kilometers {{notification.neatestLocation}}</li>
+                        <li>The nearest cases is: <strong>{{notification.distance}}</strong> kilometers {{notification.neatestLocation}}</li>
                     </ul>
                     (<i>We are developing this feature from the dataset in Reference (below of page) so that it is only estimated.
                     Feedback for us at: <a style="color: #2E70DB" href="mailto:akdev.pro@gmail.com" rel="nofollow">akdev.pro@gmail.com</a></i>)
@@ -46,13 +57,10 @@
         <div class="notification is-warning">
             <button class="delete"></button>
             <div class="columns">
-                <div class="column is-2 has-text-centered">
-                    <img data-src="/images/error.png">
-                </div>
                 <div class="column">
                     <ul>
                         <li>Your address: {{location.address}}</li>
-                        <li>The nearest epidemic center is: <strong>{{notification.distance}}</strong> kilometers {{notification.neatestLocation}}</li>
+                        <li>The nearest cases is: <strong>{{notification.distance}}</strong> kilometers {{notification.neatestLocation}}</li>
                     </ul>
                     (<i>We are developing this feature from the dataset in Reference (below of page) so that it is only estimated.
                     Feedback for us at: <a style="color: #2E70DB" href="mailto:akdev.pro@gmail.com" rel="nofollow">akdev.pro@gmail.com</a></i>)
@@ -63,13 +71,10 @@
         <div class="notification is-success">
             <button class="delete"></button>
             <div class="columns">
-                <div class="column is-2 has-text-centered">
-                    <img data-src="/images/shield.png">
-                </div>
                 <div class="column">
                     <ul>
                         <li>Your address: {{location.address}}</li>
-                        <li>The nearest epidemic center is: <strong>{{notification.distance}}</strong> kilometers {{notification.neatestLocation}}</li>
+                        <li>The nearest cases is: <strong>{{notification.distance}}</strong> kilometers {{notification.neatestLocation}}</li>
                     </ul>
                     (<i>We are developing this feature from the dataset in Reference (below of page) so that it is only estimated.
                         Feedback for us at: <a style="color: #2E70DB" href="mailto:akdev.pro@gmail.com" rel="nofollow">akdev.pro@gmail.com</a></i>)
@@ -115,7 +120,7 @@
     <div class="column">
         <div class="field">
             <p class="control has-icons-left">
-                <input class="input" type="text" id="textSearch" placeholder="Enter country or province...">
+                <input class="input" type="text" id="textSearch" placeholder="Filter country or province...">
                 <span class="icon is-small is-left">
             <i class="fa fa-search"></i>
         </span>
@@ -173,6 +178,57 @@
 
 <!-- SCRIPT BLOCK -->
 {% block script_footer %}
+{% if location.code == "CN" %}
+<script src="https://maps.google.cn/maps/api/js?key=AIzaSyC7lsFGFuvTI1Ar98zzWNP2xbcd4TLlj5I&libraries=places&callback=initAutocomplete"
+        async defer></script>
+{% else %}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7lsFGFuvTI1Ar98zzWNP2xbcd4TLlj5I&libraries=places&callback=initAutocomplete"
+        async defer></script>
+{% endif %}
+<script>
+    function initAutocomplete() {
+        let input = document.getElementById('pac-input');
+
+        let autocomplete = new google.maps.places.Autocomplete(
+            input, {
+                // types: ['(cities)']
+            });
+
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+            let place = autocomplete.getPlace();
+
+            let country = "";
+            let code = "";
+            let city = "";
+            let lat = place.geometry.location.lat();
+            let lng = place.geometry.location.lng();
+
+            for (let i = 0; i < place.address_components.length; i++) {
+                let addressType = place.address_components[i].types[0];
+                // for the country, get the country code (the "short name") also
+                if (addressType === "country") {
+                    code = place.address_components[i].short_name;
+                    country = place.address_components[i].long_name;
+                } else if (addressType === "administrative_area_level_1") {
+                    city = place.address_components[i].long_name;
+                }
+            }
+
+            const xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState === XMLHttpRequest.DONE) {
+                    if (xmlhttp.status === 200) {
+                        window.location.reload();
+                    }
+                }
+            };
+
+            let uri = "/location?country=" + country + "&lat=" + lat + "&lng=" + lng + "&code=" + code + "&city=" + city;
+            xmlhttp.open("GET", uri, true);
+            xmlhttp.send();
+        });
+    }
+</script>
 <script>
     let dataTable = document.getElementById('dataTable');
     let textSearch = document.getElementById('textSearch');
