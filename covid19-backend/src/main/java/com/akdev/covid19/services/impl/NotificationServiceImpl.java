@@ -21,6 +21,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public Notification detectLocationSafety(GeoIP geoIP) throws Exception {
+        if (geoIP == null) return null;
         List<Placemark> virusMarks = coronavirusService.getPlacesFromGoogleMap();
 
         Map<String, Double> network = new HashMap<>();

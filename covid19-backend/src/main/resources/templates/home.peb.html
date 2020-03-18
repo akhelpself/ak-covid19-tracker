@@ -21,6 +21,7 @@
 <h1 class="title is-3">COVID-19</h1>
 <h2 class="subtitle is-5">Coronavirus tracker</h2>
 
+{% if notification != null %}
 <div class="columns">
     <div class="column">
         {% if notification.level == 3 %}
@@ -84,6 +85,7 @@
 
     </div>
 </div>
+{% endif %}
 
 <div class="columns">
     <div class="column">

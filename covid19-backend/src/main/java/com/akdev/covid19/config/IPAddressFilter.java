@@ -39,7 +39,6 @@ public class IPAddressFilter implements Filter {
         GeoIP geoIP = (GeoIP) httpSession.getAttribute("location");
         if (geoIP == null) {
             //check cookie
-            Cookie[] cookies = request.getCookies();
             if("/".equals(request.getRequestURI())) {
                 try {
                     String ipAddress = SpringUtils.getClientIp(request);
@@ -49,10 +48,6 @@ public class IPAddressFilter implements Filter {
                 }
             }
 
-            if (geoIP == null) {
-                geoIP = new GeoIP("USA", "US", null, "New York", "40.721092", "-73.999789");
-            }
-            geoIP.setType(1);
             httpSession.setAttribute("location", geoIP);
         }
 
