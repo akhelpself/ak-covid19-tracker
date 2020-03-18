@@ -21,28 +21,13 @@ public class CacheManager {
 
     private ObjectMapper mapper = new ObjectMapper();
 
-    private CSVReader csvReader;
-
-    public CacheManager(CSVReader csvReader) {
-        this.csvReader = csvReader;
-    }
+    public CacheManager() { }
 
     public <T> T get(String key, Class<T> cl) throws Exception {
-        if (d.containsKey(key) && t.containsKey(key) && expiredTimeValid(t.get(key))) {
-            return mapper.readValue(d.get(key), cl);
-        }
         return mapper.readValue(d.get(key), cl);
     }
 
     public <T> T get(String key, TypeReference<T> type) throws Exception {
-        if (d.containsKey(key) && t.containsKey(key) && expiredTimeValid(t.get(key))) {
-            return mapper.readValue(d.get(key), type);
-        }
-        SimpleDateFormat fm = new SimpleDateFormat("MM-dd-yyyy");
-        fm.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String date = fm.format(new Date(System.currentTimeMillis() - 24 * 3600 * 1000));
-        List<CovidData> covidDataList = csvReader.convertData(date);
-        put(key, mapper.writeValueAsString(covidDataList));
         return mapper.readValue(d.get(key), type);
     }
 

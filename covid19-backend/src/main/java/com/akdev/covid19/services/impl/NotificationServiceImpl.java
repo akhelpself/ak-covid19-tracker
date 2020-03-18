@@ -3,6 +3,7 @@ package com.akdev.covid19.services.impl;
 import com.akdev.covid19.model.CovidData;
 import com.akdev.covid19.model.GeoIP;
 import com.akdev.covid19.model.Notification;
+import com.akdev.covid19.model.geo.Placemark;
 import com.akdev.covid19.services.CoronavirusService;
 import com.akdev.covid19.services.NotificationService;
 import com.akdev.covid19.utils.MapUtils;
@@ -21,15 +22,17 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public Notification detectLocationSafety(GeoIP geoIP) throws Exception {
-        List<CovidData> covidDataList = coronavirusService.getAllData();
+        List<Placemark> virusMarks = coronavirusService.getPlacesFromGoogleMap();
+
         Map<String, Double> network = new HashMap<>();
-        covidDataList.parallelStream().forEach(x -> {
+        virusMarks.forEach(x -> {
+            String[] c = x.getCoordinates().split(",");
             double d = distance(
                     Double.parseDouble(geoIP.getLatitude()),
                     Double.parseDouble(geoIP.getLongitude()),
-                    Double.parseDouble(x.getLocation().getCoordinates().getLat()),
-                    Double.parseDouble(x.getLocation().getCoordinates().getLng()), "K");
-            network.put(x.getLocation().toString(), d);
+                    Double.parseDouble(c[1]),
+                    Double.parseDouble(c[0]), "K");
+            network.put(x.key(), d);
         });
 
         Notification notification = new Notification();

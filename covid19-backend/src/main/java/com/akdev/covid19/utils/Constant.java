@@ -4,7 +4,7 @@ public class Constant {
 
     public static final String DEFAULT_DEFAULT_URL = "https://akcovid.com";
 
-    private static final String DESTINATION = "/opt";
+    public static final String DESTINATION = "/opt";
 
     public static final String KEY_HEADER_TITLE = "headerTitle";
     public static final String KEY_HEADER_THUMBNAIL_URL = "headerThumbnailUrl";
