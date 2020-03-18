@@ -1,0 +1,33 @@
+{% extends 'base' %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/css/bulma.min.css">
+<link rel="stylesheet" type="text/css" href="/css/main.css">
+<link rel="stylesheet" type="text/css" href="/css/bulma-docs.min.css">
+{% endblock style %}
+
+<!-- CONTENT BLOCK -->
+{% block content %}
+<div class="card">
+    <div class="card-content">
+        <div class="media">
+            <h1 class="title is-3">Covid-19 Timeline for major updates (GMT)</h1>
+        </div>
+        <div class="content">
+            {% for line in timeline %}
+                {% if line.isTitle %}
+                    <h3 class="title is-4">{{line.content}}</h3>
+                {% else %}
+                    <li>{{line.content}}</li>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+<!-- SCRIPT BLOCK -->
+{% block script_footer %}
+
+{% endblock script_footer %}
