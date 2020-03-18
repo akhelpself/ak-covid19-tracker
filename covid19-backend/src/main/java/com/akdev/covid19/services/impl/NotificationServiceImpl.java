@@ -1,6 +1,5 @@
 package com.akdev.covid19.services.impl;
 
-import com.akdev.covid19.model.CovidData;
 import com.akdev.covid19.model.GeoIP;
 import com.akdev.covid19.model.Notification;
 import com.akdev.covid19.model.geo.Placemark;
@@ -42,7 +41,7 @@ public class NotificationServiceImpl implements NotificationService {
             double v = results.get(k);
             if (i == 0) {
                 if (v < 100) notification.setLevel(3);
-                else if (v > 100 && v < 500) notification.setLevel(2);
+                else if (v > 100 && v < 200) notification.setLevel(2);
                 else notification.setLevel(1);
                 notification.setAddress(geoIP.getAddress());
                 notification.setDistance( Math.round(v * 100.0) / 100.0);

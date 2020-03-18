@@ -7,6 +7,8 @@ import com.akdev.covid19.services.CoronavirusService;
 import com.akdev.covid19.utils.CSVReader;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -36,6 +38,7 @@ public class CoronavirusServiceImpl implements CoronavirusService {
     private static final String GOOGLE_MAP = "https://www.google.com/maps/d/u/0/kml?mid=1a04iBi41DznkMaQRnICO40ktROfnMfMx&ll=12.44699010934282%2C-108.16550402097914&z=3";
     private static final String CACHE_VIRUS_PLACE = "CACHE_VIRUS_PLACE";
     private CSVReader csvReader;
+    private Logger logger = LogManager.getLogger(CoronavirusServiceImpl.class);
 
     public CoronavirusServiceImpl(CacheManager cacheManager,
                                   CSVReader csvReader) {
@@ -52,10 +55,7 @@ public class CoronavirusServiceImpl implements CoronavirusService {
         if (cacheManager.invalid(ALL)) {
             return cacheManager.get(ALL, new TypeReference<List<CovidData>>() {});
         }
-        SimpleDateFormat fm = new SimpleDateFormat("MM-dd-yyyy");
-        fm.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String date = fm.format(new Date(System.currentTimeMillis() - 24 * 3600 * 1000));
-        List<CovidData> covidDataList = csvReader.convertData(date);
+        List<CovidData> covidDataList = csvReader.convertData();
         cacheManager.put(ALL, covidDataList);
         return covidDataList;
     }
@@ -98,19 +98,25 @@ public class CoronavirusServiceImpl implements CoronavirusService {
         NodeList nodeList = ((Element) folders.item(0)).getElementsByTagName("Placemark");
         List<Placemark> placemarks = new ArrayList<>();
         for (int i = 0; i < nodeList.getLength(); i++) {
-            Element e = (Element) nodeList.item(i);
-            String name = e.getElementsByTagName("name").item(0).getTextContent();
-            String description = e.getElementsByTagName("description").item(0).getTextContent();
-            String styleUrl = e.getElementsByTagName("styleUrl").item(0).getTextContent();
-            String coordinates = e.getElementsByTagName("Point").item(0).getChildNodes().item(1).getTextContent().replace("\n", "").replace(" ", "");
+            try {
+                Element e = (Element) nodeList.item(i);
+                String name = e.getElementsByTagName("name").item(0).getTextContent();
+                logger.info("Parsing city: [{}]", name);
+                String description = e.getElementsByTagName("description").item(0).getTextContent();
+                String styleUrl = e.getElementsByTagName("styleUrl").item(0).getTextContent();
+                String coordinates = e.getElementsByTagName("Point").item(0).getChildNodes().item(1).getTextContent().replace("\n", "").replace(" ", "");
 
-            Placemark p = new Placemark();
-            p.setCoordinates(coordinates);
-            p.setDescription(description);
-            p.setStyleUrl(styleUrl);
-            p.setName(name);
+                Placemark p = new Placemark();
+                p.setCoordinates(coordinates);
+                p.setDescription(description);
+                p.setStyleUrl(styleUrl);
+                p.setName(name);
 
-            placemarks.add(p);
+                placemarks.add(p);
+            } catch (Exception e) {
+                logger.error(e);
+            }
+
         }
         cacheManager.put(CACHE_VIRUS_PLACE, placemarks);
         return placemarks;

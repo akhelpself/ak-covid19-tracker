@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,36 +23,46 @@ public class CSVReader {
     private Logger logger = LogManager.getLogger(CSVReader.class);
     private SimpleDateFormat fm = new SimpleDateFormat("HH:mm:ss MM-dd-yyyy");
 
-    public List<CovidData> convertData(String date) throws IOException {
-        logger.info("Request service: {}", fm.format(new Date()));
+    public static void main(String[] args) throws Exception {
+        CSVReader csvReader = new CSVReader();
+        csvReader.convertData();
+    }
 
-        String link = String.format("https://raw.githubusercontent.com/CSSEGISandData/COVID-19//master/csse_covid_19_data/csse_covid_19_daily_reports/%s.csv", date);
+    public List<CovidData> convertData() throws IOException {
+        String link = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR30F8lYP3jG7YOq8es0PBpJIE5yvRVZffOyaqC0GgMBN6yt0Q-NI8pxS7hd1F9dYXnowSC6zpZmW9D/pub?output=csv";
         URL url = new URL(link);
         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
         InputStream inputStream = httpURLConnection.getInputStream();
         String[] line = getStringFromStream(inputStream).split("\\n");
         List<CovidData> results = new ArrayList<>();
-        Arrays.asList(line).forEach(l -> {
-            String[] c = l.replaceAll("\\r", "").split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-            if (!c[0].contains("Province/State")) {
-
+        for (int i = 0; i < line.length - 1; i++) {
+            if (i > 5) {
+                String[] c = line[i].replaceAll("\\r", "").split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
                 CovidData data = new CovidData();
                 Location location = new Location();
-                location.setProvince(c[0]);
-                location.setCountry(c[1]);
-                location.setCoordinates(new Coordinates(c[6], c[7]));
+                location.setCountry(c[0]);
                 data.setLocation(location);
-                data.setConfirmed(Integer.parseInt(c[3]));
-                data.setDeaths(Integer.parseInt(c[4]));
-                data.setRecovered(Integer.parseInt(c[5]));
-                data.setLastUpdated(c[2]);
+                data.setConfirmed(parseInt(c[1]));
+                data.setDeaths(parseInt(c[2]));
+                data.setSerious(parseInt(c[3]));
+                data.setCritical(parseInt(c[4]));
+                data.setRecovered(parseInt(c[5]));
                 results.add(data);
             }
-        });
+        }
         return results;
     }
 
+
+    private Integer parseInt(String v) {
+        try {
+            return Integer.parseInt(v.replaceAll("[^\\d.]",""));
+        } catch (Exception e) {
+
+        }
+        return 0;
+    }
 
     private static String getStringFromStream(InputStream inputStream) throws IOException {
         if (inputStream != null) {

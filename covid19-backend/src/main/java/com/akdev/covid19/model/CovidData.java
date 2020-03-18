@@ -23,4 +23,10 @@ public class CovidData {
     @JsonProperty(value = "data")
     private Location location;
 
+    @JsonProperty(value = "serious")
+    private int serious;
+
+    @JsonProperty(value = "critical")
+    private int critical;
+
 }

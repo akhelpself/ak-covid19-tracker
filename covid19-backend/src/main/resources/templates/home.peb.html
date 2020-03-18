@@ -132,13 +132,12 @@
         <table class="table is-fullwidth">
             <thead>
             <tr>
-                <th>Province</th>
                 <th>Country</th>
                 <th>Confirmed</th>
                 <th>Deaths</th>
+                <th>Serious</th>
+                <th>Critical</th>
                 <th>Recovered</th>
-                <th>Lat</th>
-                <th>Lng</th>
             </tr>
             </thead>
             <tbody id="dataTable"></tbody>
@@ -199,8 +198,7 @@
             let k = event.target.value;
             if (k.length > 2) {
                 let results = Array.from(items).filter(x =>
-                    x.data.province.toLowerCase().indexOf(k.toLowerCase()) > -1
-                    || x.data.country.toLowerCase().indexOf(k.toLowerCase()) > -1
+                    x.data.country.toLowerCase().indexOf(k.toLowerCase()) > -1
                 );
                 loadDataToTable(results);
             }  else {
@@ -214,22 +212,21 @@
         items.forEach(item => {
             html += `
                  <tr>
-                    <td>${item.data.province}</td>
                     <td>${item.data.country}</td>
                     <td>
-                        <strong><p class="has-text-warning">${item.confirmed}</p></strong>
+                        <strong><p class="has-text-warning">${formatNumber(item.confirmed)}</p></strong>
                     </td>
                     <td>
-                        <strong><p class="has-text-danger">${item.deaths}</p></strong>
+                        <strong><p class="has-text-danger">${formatNumber(item.deaths)}</p></strong>
                     </td>
                     <td>
-                        <strong><p class="has-text-success">${item.recovered}</p></strong>
+                        <strong><p class="has-text-black">${formatNumber(item.serious)}</p></strong>
                     </td>
                     <td>
-                        ${item.data.coordinates.lat}
+                        <strong><p class="has-text-black">${formatNumber(item.critical)}</p></strong>
                     </td>
-                    <td>
-                        ${item.data.coordinates.lng}
+                     <td>
+                        <strong><p class="has-text-success">${formatNumber(item.recovered)}</p></strong>
                     </td>
                 </tr>`;
         });
@@ -237,6 +234,11 @@
             html += `<tr>Not found!</tr>`
         }
         dataTable.innerHTML = html;
+    }
+
+    function formatNumber(number) {
+        if (number === 0) return '-';
+        return number.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
 
 </script>
