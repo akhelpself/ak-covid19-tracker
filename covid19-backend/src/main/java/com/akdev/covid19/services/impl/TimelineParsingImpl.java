@@ -46,6 +46,9 @@ public class TimelineParsingImpl implements TimelineParsing {
                 Timeline t = new Timeline();
                 t.setTitle(false);
                 t.setContent(e.ownText().replaceAll("\\(.*?\\)", ""));
+
+                String href = e.getElementsByTag("a").attr("href");
+                t.setSource(href);
                 results.add(t);
             }
         }

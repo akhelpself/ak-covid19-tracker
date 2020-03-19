@@ -7,5 +7,6 @@ public class Timeline {
 
     private boolean isTitle;
     private String content;
+    private String source;
 
 }

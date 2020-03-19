@@ -19,7 +19,7 @@
                 {% if line.isTitle %}
                     <h3 class="title is-4">{{line.content}}</h3>
                 {% else %}
-                    <li>{{line.content}}</li>
+                <li>{{line.content}} (<a href="{{line.source}}" >Source</a>)</li>
                 {% endif %}
             {% endfor %}
         </div>
