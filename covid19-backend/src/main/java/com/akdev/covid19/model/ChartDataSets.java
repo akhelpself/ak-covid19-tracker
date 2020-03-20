@@ -11,4 +11,6 @@ public class ChartDataSets {
     private List<Double> data;
     private int borderWidth;
     private Object backgroundColor;
+    private Object borderColor;
+    private boolean fill;
 }

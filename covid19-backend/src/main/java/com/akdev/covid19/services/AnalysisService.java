@@ -18,4 +18,9 @@ public interface AnalysisService {
 
     ChartData groupConfirmedBySymptom() throws Exception;
 
+    ChartData timeSeriesReport() throws Exception;
+
+
+
+
 }

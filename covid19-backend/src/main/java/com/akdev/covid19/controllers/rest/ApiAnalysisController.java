@@ -57,5 +57,10 @@ public class ApiAnalysisController {
     }
 
 
+    @GetMapping(value = "/confirmed-by-time-series")
+    public ResponseEntity confirmedByTimeSeries() throws Exception {
+        return ResponseEntity.ok(analysisService.timeSeriesReport());
+    }
+
 
 }

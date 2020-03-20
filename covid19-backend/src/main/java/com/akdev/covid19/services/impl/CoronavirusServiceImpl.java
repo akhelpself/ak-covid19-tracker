@@ -21,11 +21,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import static com.akdev.covid19.utils.Constant.DESTINATION;
 import static com.akdev.covid19.utils.Route.*;
@@ -55,7 +52,7 @@ public class CoronavirusServiceImpl implements CoronavirusService {
         if (cacheManager.invalid(ALL)) {
             return cacheManager.get(ALL, new TypeReference<List<CovidData>>() {});
         }
-        List<CovidData> covidDataList = csvReader.convertData();
+        List<CovidData> covidDataList = csvReader.reportTimeSeries();
         cacheManager.put(ALL, covidDataList);
         return covidDataList;
     }

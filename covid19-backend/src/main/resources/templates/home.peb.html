@@ -116,6 +116,9 @@
 </p><br><br>
 
 
+<canvas id="timeSeries" style="min-height: 700px;"></canvas>
+<br/>
+
 <div class="columns">
     <div class="column">
         <div class="field">
@@ -138,7 +141,7 @@
                 <th>Confirmed</th>
                 <th>Deaths</th>
                 <th>Serious</th>
-                <th>Critical</th>
+                <!--<th>Critical</th>-->
                 <th>Recovered</th>
             </tr>
             </thead>
@@ -229,23 +232,16 @@
         });
     }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 <script>
     let dataTable = document.getElementById('dataTable');
     let textSearch = document.getElementById('textSearch');
 
     let items = [];
     document.addEventListener('DOMContentLoaded', function () {
-        const xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState === XMLHttpRequest.DONE) {
-                if (xmlhttp.status === 200) {
-                    items = JSON.parse(xmlhttp.responseText);
-                    loadDataToTable(items);
-                }
-            }
-        };
-        xmlhttp.open("GET", '/all', true);
-        xmlhttp.send();
+        loadFromApi();
+
+        buildChart('timeSeries', '/api/confirmed-by-time-series', 'line');
 
         textSearch.addEventListener('keyup', function(event) {
             let k = event.target.value;
@@ -253,14 +249,50 @@
                 let results = Array.from(items).filter(x =>
                     x.data.country.toLowerCase().indexOf(k.toLowerCase()) > -1
                 );
-                loadDataToTable(results);
+                loadDataToHtml(results);
             }  else {
-                loadDataToTable(items);
+                loadDataToHtml(items);
             }
         })
     });
 
-    function loadDataToTable(items) {
+    function buildChart(id, url, type) {
+        const xmlhttp = new XMLHttpRequest();
+        let ctx = document.getElementById(id).getContext('2d');
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState === XMLHttpRequest.DONE) {
+                if (xmlhttp.status === 200) {
+                    new Chart(ctx, {
+                        type: type,
+                        data: JSON.parse(xmlhttp.responseText),
+                        options: {
+                            responsive: true
+                        }
+                    });
+                }
+            }
+        };
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+
+
+    function loadFromApi() {
+        const xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState === XMLHttpRequest.DONE) {
+                if (xmlhttp.status === 200) {
+                    items = JSON.parse(xmlhttp.responseText);
+                    loadDataToHtml(items);
+                }
+            }
+        };
+        xmlhttp.open("GET", '/all', true);
+        xmlhttp.send();
+    }
+
+
+    function loadDataToHtml(items) {
         let html = '';
         items.forEach(item => {
             html += `
@@ -274,9 +306,6 @@
                     </td>
                     <td>
                         <strong><p class="has-text-black">${formatNumber(item.serious)}</p></strong>
-                    </td>
-                    <td>
-                        <strong><p class="has-text-black">${formatNumber(item.critical)}</p></strong>
                     </td>
                      <td>
                         <strong><p class="has-text-success">${formatNumber(item.recovered)}</p></strong>

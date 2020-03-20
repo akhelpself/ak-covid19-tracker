@@ -7,9 +7,12 @@ import com.akdev.covid19.model.CovidData;
 import com.akdev.covid19.model.CovidUser;
 import com.akdev.covid19.services.AnalysisService;
 import com.akdev.covid19.services.CoronavirusService;
+import com.akdev.covid19.utils.CSVReader;
+import com.akdev.covid19.utils.ColorUtils;
 import com.akdev.covid19.utils.Constant;
 import com.akdev.covid19.utils.MapUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.*;
@@ -18,6 +21,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,6 +47,7 @@ public class AnalysisServiceImpl implements AnalysisService {
     private static final String CONFIRMED_BY_GENDER = "CONFIRMED_BY_GENDER";
     private static final String DEATHS_BY_GENDER = "DEATHS_BY_GENDER";
     private static final String CONFIRMED_BY_SYMPTOM = "CONFIRMED_BY_SYMPTOM";
+    private static final String DEATHS_BY_TIME_SERIES = "DEATHS_BY_TIME_SERIES";
 
     private CacheManager cacheManager;
     private CoronavirusService coronavirusService;
@@ -53,6 +58,56 @@ public class AnalysisServiceImpl implements AnalysisService {
         this.coronavirusService = coronavirusService;
     }
 
+    @Override
+    public ChartData timeSeriesReport() throws Exception {
+        if (cacheManager.invalid(DEATHS_BY_TIME_SERIES)) {
+            return cacheManager.get(DEATHS_BY_TIME_SERIES, ChartData.class);
+        }
+        Map<String, Double[]> results = new HashMap<>();
+        List<String> countrySelected = coronavirusService
+                .getAllData().stream().map(x -> x.getLocation().getCountry())
+                .collect(Collectors.toList()).subList(0, 10);
+
+        String[] l = CSVReader.reportConfirmedCasesSeries();
+        int n = l.length;
+        List<String> labels = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            String[] c = l[i].replaceAll("\\r", "").split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+            if (i == 0) {
+                labels.addAll(Arrays.asList(c).subList(4, c.length));
+            } else {
+                Double[] v = results.getOrDefault(c[1], new Double[labels.size()]);
+                List<Double> d = Arrays.asList(c).subList(4, c.length).stream().map(Double::parseDouble).collect(Collectors.toList());
+                for (int j = 0; j < d.size(); j++) {
+                    v[j] = (v[j] == null ? 0 : v[j] ) + d.get(j);
+                }
+                results.put(c[1], v);
+            }
+        }
+
+        List<ChartDataSets> dataSets = new ArrayList<>();
+
+        int i = 0;
+        for (String k: results.keySet()) {
+            if (!countrySelected.contains(k)) continue;
+            ChartDataSets item = new ChartDataSets();
+            item.setData(Arrays.asList(results.get(k)));
+            item.setLabel(k);
+            String color = ColorUtils.randomStringRGB();
+            item.setBackgroundColor(color);
+            item.setBorderColor(color);
+            item.setBorderWidth(2);
+            dataSets.add(item);
+            i++;
+        }
+
+        ChartData data = new ChartData();
+        data.setDatasets(dataSets.toArray(new ChartDataSets[dataSets.size()]));
+        data.setLabels(labels);
+
+        cacheManager.put(DEATHS_BY_TIME_SERIES, data);
+        return data;
+    }
 
     @Override
     @SuppressWarnings("Duplicates")
