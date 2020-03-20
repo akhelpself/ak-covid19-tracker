@@ -35,12 +35,16 @@ public class CSVReader {
         String url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR30F8lYP3jG7YOq8es0PBpJIE5yvRVZffOyaqC0GgMBN6yt0Q-NI8pxS7hd1F9dYXnowSC6zpZmW9D/pub?output=csv";
         String[] line = getStringFromStream(url).split("\\n");
         List<CovidData> results = new ArrayList<>();
-        for (int i = 0; i < line.length - 1; i++) {
+        for (int i = 0; i < line.length; i++) {
             if (i > 5) {
+
                 String[] c = line[i].replaceAll("\\r", "").split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
                 CovidData data = new CovidData();
                 Location location = new Location();
                 location.setCountry(c[0]);
+
+                if (c[0] != null && c[0].equalsIgnoreCase("total")) continue;
+
                 data.setLocation(location);
                 data.setConfirmed(parseInt(c[1]));
                 data.setDeaths(parseInt(c[3]));

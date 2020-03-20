@@ -63,10 +63,9 @@ public class AnalysisServiceImpl implements AnalysisService {
         if (cacheManager.invalid(DEATHS_BY_TIME_SERIES)) {
             return cacheManager.get(DEATHS_BY_TIME_SERIES, ChartData.class);
         }
+
         Map<String, Double[]> results = new HashMap<>();
-        List<String> countrySelected = coronavirusService
-                .getAllData().stream().map(x -> x.getLocation().getCountry())
-                .collect(Collectors.toList()).subList(0, 10);
+        Map<String, Double> ref = new LinkedHashMap<>();
 
         String[] l = CSVReader.reportConfirmedCasesSeries();
         int n = l.length;
@@ -82,27 +81,27 @@ public class AnalysisServiceImpl implements AnalysisService {
                     v[j] = (v[j] == null ? 0 : v[j] ) + d.get(j);
                 }
                 results.put(c[1], v);
+                ref.put(c[1], v[v.length - 1]);
             }
         }
 
-        List<ChartDataSets> dataSets = new ArrayList<>();
+        ref = MapUtils.sortDoubleByValue(ref, 10, 1);
+        ChartDataSets[] dataSets = new ChartDataSets[ref.size()];
 
         int i = 0;
-        for (String k: results.keySet()) {
-            if (!countrySelected.contains(k)) continue;
-            ChartDataSets item = new ChartDataSets();
-            item.setData(Arrays.asList(results.get(k)));
-            item.setLabel(k);
+        for (String k: ref.keySet()) {
+            dataSets[i] = new ChartDataSets();
+            dataSets[i].setData(Arrays.asList(results.get(k)));
+            dataSets[i].setLabel(k);
             String color = ColorUtils.randomStringRGB();
-            item.setBackgroundColor(color);
-            item.setBorderColor(color);
-            item.setBorderWidth(2);
-            dataSets.add(item);
+            dataSets[i].setBackgroundColor(color);
+            dataSets[i].setBorderColor(color);
+            dataSets[i].setBorderWidth(2);
             i++;
         }
 
         ChartData data = new ChartData();
-        data.setDatasets(dataSets.toArray(new ChartDataSets[dataSets.size()]));
+        data.setDatasets(dataSets);
         data.setLabels(labels);
 
         cacheManager.put(DEATHS_BY_TIME_SERIES, data);

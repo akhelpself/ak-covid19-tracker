@@ -49,9 +49,9 @@ public class CoronavirusServiceImpl implements CoronavirusService {
      */
     @Override
     public List<CovidData> getAllData() throws Exception {
-        if (cacheManager.invalid(ALL)) {
-            return cacheManager.get(ALL, new TypeReference<List<CovidData>>() {});
-        }
+//        if (cacheManager.invalid(ALL)) {
+//            return cacheManager.get(ALL, new TypeReference<List<CovidData>>() {});
+//        }
         List<CovidData> covidDataList = csvReader.reportTimeSeries();
         cacheManager.put(ALL, covidDataList);
         return covidDataList;
