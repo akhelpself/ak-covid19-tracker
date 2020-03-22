@@ -57,9 +57,19 @@ public class ApiAnalysisController {
     }
 
 
+    @GetMapping(value = "/deaths-by-time-series")
+    public ResponseEntity deathsByTimeSeries() throws Exception {
+        return ResponseEntity.ok(analysisService.timeSeriesReport("Deaths"));
+    }
+
     @GetMapping(value = "/confirmed-by-time-series")
     public ResponseEntity confirmedByTimeSeries() throws Exception {
-        return ResponseEntity.ok(analysisService.timeSeriesReport());
+        return ResponseEntity.ok(analysisService.timeSeriesReport("Confirmed"));
+    }
+
+    @GetMapping(value = "/recovered-by-time-series")
+    public ResponseEntity recoveredByTimeSeries() throws Exception {
+        return ResponseEntity.ok(analysisService.timeSeriesReport("Recovered"));
     }
 
 

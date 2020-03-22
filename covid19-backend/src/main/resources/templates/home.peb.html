@@ -115,8 +115,15 @@
         <i class="fa fa-line-chart"></i>&nbsp;Go to Analystics</a>
 </p><br><br>
 
+<div class="tabs is-centered">
+    <ul>
+        <li class="is-active" id="reportDeaths"><a>Report Deaths</a></li>
+        <li id="reportConfirmed"><a>Report Confirmed</a></li>
+        <li id="reportRecovered"><a>Report Recovered</a></li>
+    </ul>
+</div>
 
-<canvas id="timeSeries" style="min-height: 700px;"></canvas>
+<div id="chartJs"></div>
 <br/>
 
 <div class="columns">
@@ -238,13 +245,20 @@
 <script>
     let dataTable = document.getElementById('dataTable');
     let textSearch = document.getElementById('textSearch');
+    let reportDeathsTab = document.getElementById('reportDeaths');
+    let reportConfirmedTab = document.getElementById('reportConfirmed');
+    let reportRecoveredTab = document.getElementById('reportRecovered');
+    let reportData = {};
 
     let items = [];
     document.addEventListener('DOMContentLoaded', function () {
         loadFromApi();
+        buildChart('timeSeries', '/api/deaths-by-time-series', 'line', 'Deaths');
+        main();
+    });
 
-        buildChart('timeSeries', '/api/confirmed-by-time-series', 'line');
 
+    function main() {
         textSearch.addEventListener('keyup', function(event) {
             let k = event.target.value;
             if (k.length > 2) {
@@ -255,29 +269,74 @@
             }  else {
                 loadDataToHtml(items);
             }
-        })
-    });
+        });
 
-    function buildChart(id, url, type) {
-        const xmlhttp = new XMLHttpRequest();
-        let ctx = document.getElementById(id).getContext('2d');
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState === XMLHttpRequest.DONE) {
-                if (xmlhttp.status === 200) {
-                    new Chart(ctx, {
-                        type: type,
-                        data: JSON.parse(xmlhttp.responseText),
-                        options: {
-                            responsive: false
-                        }
-                    });
-                }
-            }
-        };
-        xmlhttp.open("GET", url, true);
-        xmlhttp.send();
+        reportDeathsTab.addEventListener('click', function() {
+            reportDeathsTab.classList.add('is-active');
+            reportConfirmedTab.classList.remove('is-active');
+            reportRecoveredTab.classList.remove('is-active');
+
+            buildChart('timeSeries', '/api/deaths-by-time-series', 'line', 'Deaths');
+        });
+
+        reportConfirmedTab.addEventListener('click', function() {
+            reportDeathsTab.classList.remove('is-active');
+            reportConfirmedTab.classList.add('is-active');
+            reportRecoveredTab.classList.remove('is-active');
+
+            buildChart('timeSeries', '/api/confirmed-by-time-series', 'line', 'Confirmed');
+        });
+
+        reportRecoveredTab.addEventListener('click', function() {
+            reportDeathsTab.classList.remove('is-active');
+            reportConfirmedTab.classList.remove('is-active');
+            reportRecoveredTab.classList.add('is-active');
+
+            buildChart('timeSeries', '/api/recovered-by-time-series', 'line', 'Recovered');
+        });
     }
 
+    function buildChart(id, url, chartType, dataType) {
+        resetChartJs();
+
+        let canvas = document.getElementById(id);
+        let ctx = canvas.getContext('2d');
+
+        if (reportData[dataType]) {
+            new Chart(ctx, {
+                type: chartType,
+                data: JSON.parse(reportData[dataType]),
+                options: {
+                    responsive: false
+                }
+            });
+        } else {
+            const xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState === XMLHttpRequest.DONE) {
+                    if (xmlhttp.status === 200) {
+                        reportData[dataType] = xmlhttp.responseText;
+                        new Chart(ctx, {
+                            type: chartType,
+                            data: JSON.parse(xmlhttp.responseText),
+                            options: {
+                                responsive: false
+                            }
+                        });
+                    }
+                }
+            };
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+        }
+
+    }
+
+    function resetChartJs() {
+        let c = document.getElementById('timeSeries');
+        if(c) c.remove();
+        document.getElementById('chartJs').innerHTML = `<canvas id="timeSeries" style="min-height: 700px;"></canvas>`;
+    }
 
     function loadFromApi() {
         const xmlhttp = new XMLHttpRequest();

@@ -3,9 +3,7 @@ package com.akdev.covid19.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.util.ArrayList;
-
-@Data
+    @Data
 public class CovidData {
 
     @JsonProperty("last_updated")

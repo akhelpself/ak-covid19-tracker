@@ -48,6 +48,8 @@ public class AnalysisServiceImpl implements AnalysisService {
     private static final String DEATHS_BY_GENDER = "DEATHS_BY_GENDER";
     private static final String CONFIRMED_BY_SYMPTOM = "CONFIRMED_BY_SYMPTOM";
     private static final String DEATHS_BY_TIME_SERIES = "DEATHS_BY_TIME_SERIES";
+    private static final String CONFIRMED_BY_TIME_SERIES = "CONFIRMED_BY_TIME_SERIES";
+    private static final String RECOVERED_BY_TIME_SERIES = "RECOVERED_BY_TIME_SERIES";
 
     private CacheManager cacheManager;
     private CoronavirusService coronavirusService;
@@ -59,15 +61,28 @@ public class AnalysisServiceImpl implements AnalysisService {
     }
 
     @Override
-    public ChartData timeSeriesReport() throws Exception {
-        if (cacheManager.invalid(DEATHS_BY_TIME_SERIES)) {
-            return cacheManager.get(DEATHS_BY_TIME_SERIES, ChartData.class);
+    public ChartData timeSeriesReport(String type) throws Exception {
+        String keyCache = "";
+        switch (type) {
+            case "Recovered":
+                keyCache = RECOVERED_BY_TIME_SERIES;
+                break;
+            case "Confirmed":
+                keyCache = CONFIRMED_BY_TIME_SERIES;
+                break;
+            default:
+                keyCache = DEATHS_BY_TIME_SERIES;
+                break;
+
+        }
+        if (cacheManager.invalid(keyCache)) {
+            return cacheManager.get(keyCache, ChartData.class);
         }
 
         Map<String, Double[]> results = new HashMap<>();
         Map<String, Double> ref = new LinkedHashMap<>();
 
-        String[] l = CSVReader.reportConfirmedCasesSeries();
+        String[] l = CSVReader.reportConfirmedCasesSeries(type);
         int n = l.length;
         List<String> labels = new ArrayList<>();
         for (int i = 0; i < n; i++) {
@@ -104,7 +119,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         data.setDatasets(dataSets);
         data.setLabels(labels);
 
-        cacheManager.put(DEATHS_BY_TIME_SERIES, data);
+        cacheManager.put(keyCache, data);
         return data;
     }
 
