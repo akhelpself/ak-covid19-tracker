@@ -12,6 +12,7 @@ public class Notification {
     private String message;
     private double distance;
     private String address;
+    private String location;
     private String neatestLocation;
     private Map<String, Double> relateLocation = new LinkedHashMap<>();
 

@@ -47,6 +47,7 @@ public class NotificationServiceImpl implements NotificationService {
                 notification.setAddress(geoIP.getAddress());
                 notification.setDistance( Math.round(v * 100.0) / 100.0);
                 notification.setNeatestLocation(k);
+                notification.setLocation(geoIP.getLatitude() + "%2C" + geoIP.getLongitude());
             } else {
                 notification.getRelateLocation().put(k, v);
             }
