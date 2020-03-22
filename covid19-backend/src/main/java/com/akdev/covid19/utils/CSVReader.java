@@ -47,9 +47,11 @@ public class CSVReader {
 
                 data.setLocation(location);
                 data.setConfirmed(parseInt(c[1]));
+                data.setNewConfirmed(parseInt(c[2]));
                 data.setDeaths(parseInt(c[3]));
+                data.setNewDeaths(parseInt(c[4]));
                 data.setSerious(parseInt(c[6]));
-//                data.setCritical(parseInt(c[4]));
+                data.setPercentOfDeaths(c[5]);
                 data.setRecovered(parseInt(c[7]));
                 results.add(data);
             }

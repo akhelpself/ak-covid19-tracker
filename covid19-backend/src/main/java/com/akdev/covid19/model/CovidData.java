@@ -14,8 +14,14 @@ public class CovidData {
     @JsonProperty("confirmed")
     private int confirmed;
 
+    @JsonProperty("new_confirmed")
+    private int newConfirmed;
+
     @JsonProperty("deaths")
     private int deaths;
+
+    @JsonProperty(value = "new_deaths")
+    private int newDeaths;
 
     @JsonProperty("recovered")
     private int recovered;
@@ -28,5 +34,8 @@ public class CovidData {
 
     @JsonProperty(value = "critical")
     private int critical;
+
+    @JsonProperty(value = "percent_of_deaths")
+    private String percentOfDeaths;
 
 }

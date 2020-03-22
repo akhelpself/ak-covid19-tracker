@@ -139,9 +139,11 @@
             <tr>
                 <th>Country</th>
                 <th>Confirmed</th>
+                <th>New cases</th>
                 <th>Deaths</th>
+                <th>New deaths</th>
+                <th>% of deaths</th>
                 <th>Serious</th>
-                <!--<th>Critical</th>-->
                 <th>Recovered</th>
             </tr>
             </thead>
@@ -266,7 +268,7 @@
                         type: type,
                         data: JSON.parse(xmlhttp.responseText),
                         options: {
-                            responsive: true
+                            responsive: false
                         }
                     });
                 }
@@ -302,7 +304,16 @@
                         <strong><p class="has-text-warning">${formatNumber(item.confirmed)}</p></strong>
                     </td>
                     <td>
+                        <strong><p class="has-text-warning">${formatNumber(item.new_confirmed)}</p></strong>
+                    </td>
+                    <td>
                         <strong><p class="has-text-danger">${formatNumber(item.deaths)}</p></strong>
+                    </td>
+                    <td>
+                        <strong><p class="has-text-danger">${formatNumber(item.new_deaths)}</p></strong>
+                    </td>
+                    <td>
+                        <strong><p class="has-text-danger">${item.percent_of_deaths}</p></strong>
                     </td>
                     <td>
                         <strong><p class="has-text-black">${formatNumber(item.serious)}</p></strong>
