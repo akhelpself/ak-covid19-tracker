@@ -10,6 +10,11 @@
 <!-- CONTENT BLOCK -->
 {% block content %}
 <div class="card">
+    {% if location != null %}
+    <iframe src="https://www.google.com/maps/d/embed?mid=1a04iBi41DznkMaQRnICO40ktROfnMfMx&ll={{location}}&z=8" style="width: 100%; height: 800px;"></iframe>
+    {% else %}
+    <iframe src="https://www.google.com/maps/d/embed?mid=1a04iBi41DznkMaQRnICO40ktROfnMfMx" style="width: 100%; height: 800px;"></iframe>
+    {% endif %}
     <div class="card-content">
         <strong>Key:</strong>
         <ul>
@@ -20,11 +25,6 @@
             <li>- Diamond shape: Cities with deaths</li>
         </ul>
     </div>
-    {% if location != null %}
-    <iframe src="https://www.google.com/maps/d/embed?mid=1a04iBi41DznkMaQRnICO40ktROfnMfMx&ll={{location}}&z=8" style="width: 100%; height: 800px;"></iframe>
-    {% else %}
-    <iframe src="https://www.google.com/maps/d/embed?mid=1a04iBi41DznkMaQRnICO40ktROfnMfMx" style="width: 100%; height: 800px;"></iframe>
-    {% endif %}
 </div>
 {% endblock content %}
 

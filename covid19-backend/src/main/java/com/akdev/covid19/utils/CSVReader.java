@@ -27,7 +27,7 @@ public class CSVReader {
 
     public static String[] reportConfirmedCasesSeries(String type) throws IOException {
         Map<String, List<String>> results = new HashMap<>();
-        String url  = String.format("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-%s.csv", type);
+        String url  = String.format("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_%s_global.csv", type.toLowerCase());
         return getStringFromStream(url).split("\\n");
     }
 

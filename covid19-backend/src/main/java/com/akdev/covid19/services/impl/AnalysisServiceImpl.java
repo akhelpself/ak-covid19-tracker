@@ -91,7 +91,10 @@ public class AnalysisServiceImpl implements AnalysisService {
                 labels.addAll(Arrays.asList(c).subList(4, c.length));
             } else {
                 Double[] v = results.getOrDefault(c[1], new Double[labels.size()]);
-                List<Double> d = Arrays.asList(c).subList(4, c.length).stream().map(x -> x == null ? 0 : Double.parseDouble(x)).collect(Collectors.toList());
+                List<Double> d = Arrays.asList(c).subList(4, c.length)
+                        .stream()
+                        .map(x -> StringUtils.isBlank(x) ? 0 : Double.parseDouble(x))
+                        .collect(Collectors.toList());
                 for (int j = 0; j < d.size(); j++) {
                     v[j] = (v[j] == null ? 0 : v[j] ) + d.get(j);
                 }
